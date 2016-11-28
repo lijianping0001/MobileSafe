@@ -3,4 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="toolbar">#11BF4B</color>
+    <color name="myGreen">#11BF4B</color>
+    <color name="myOrange">#FFA726</color>
+    <color name="myPurple">#AB47BC</color>
+    <color name="myBlue">#738FFE</color>
+    <color name="myYellow">#F5EB31</color>
+    <color name="myRed">#E84E40</color>
+    <color name="myLightBlue">#29b6f6</color>
 </resources>

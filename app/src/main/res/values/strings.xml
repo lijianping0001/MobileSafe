@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">MobileSafe</string>
+    <string name="app_name">手机卫士</string>
+
+
+    <string name="func_protection">手机防盗</string>
+    <string name="func_speed_up">一键加速</string>
+    <string name="func_app_manager">软件管理</string>
+    <string name="func_defend">骚扰拦截</string>
+    <string name="func_app_lock">程序锁</string>
+    <string name="func_virus">病毒查杀</string>
+    <string name="func_clean_cache">缓存清理</string>
+    <string name="func_check">硬件检测</string>
+    <string name="func_location">归属地查询</string>
+    <string name="func_qrcode">安全扫码</string>
+    <string name="func_net_speed">网络测速</string>
+    <string name="func_backup">安全备份</string>
 </resources>
