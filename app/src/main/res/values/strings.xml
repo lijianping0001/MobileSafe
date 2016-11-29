@@ -2,6 +2,10 @@
     <string name="app_name">手机卫士</string>
 
 
+    <string name="cpu">CPU</string>
+    <string name="memory">内存</string>
+
+
     <string name="func_protection">手机防盗</string>
     <string name="func_speed_up">一键加速</string>
     <string name="func_app_manager">软件管理</string>
