@@ -1,19 +1,26 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.IconAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.model.Icon;
+import com.jianping.lee.mobilesafe.utils.CommomUtils;
 import com.jianping.lee.mobilesafe.utils.DensityUtils;
+import com.jianping.lee.mobilesafe.utils.LogUtils;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
+import com.jianping.lee.mobilesafe.utils.SystemUtils;
 import com.jianping.lee.mobilesafe.views.RoundProgressBar;
 
 import java.io.BufferedReader;
@@ -23,13 +30,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class MainActivity extends BaseActivity {
 
     private boolean progressRun = true;
 
-    private RoundProgressBar cpuProgress;
+    @InjectView(R.id.view_main_cpu)
+    RoundProgressBar mCpuProgress;
 
-    private RoundProgressBar memProgress;
+    @InjectView(R.id.view_main_mem)
+    RoundProgressBar mMemProgress;
+
+    @InjectView(R.id.gv_main_content)
+    GridView mGridView;
+
+    @InjectView(R.id.iv_title_right)
+    ImageView mSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,76 +58,89 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void initView() {
-        GridView gridView = (GridView) findViewById(R.id.gv_main_content);
-        cpuProgress = (RoundProgressBar) findViewById(R.id.view_main_cpu);
-        memProgress = (RoundProgressBar) findViewById(R.id.view_main_mem);
-
+    protected void initView() {
+        mSetting.setVisibility(View.VISIBLE);
+        mSetting.setImageResource(R.drawable.icon_app);
         //动态计算GridView的宽度，适配不同的屏幕
         int screenWidth = ScreenUtils.getScreenWidth(this);
         int iconWidth = (screenWidth - DensityUtils.dp2px(this, 120)) / 3;
-        gridView.setColumnWidth(iconWidth);
+        mGridView.setColumnWidth(iconWidth);
 
         ArrayList<Icon> dataList = new ArrayList<>();
         addAllFunction(dataList);
         IconAdapter adapter = new IconAdapter(this, dataList);
-        gridView.setAdapter(adapter);
+        mGridView.setAdapter(adapter);
+        mGridView.setOnItemClickListener(clickListener);
+
     }
 
-    private void initData() {
+    private AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position){
+                case 0://手机防盗
+                    jumpToActivity(LostFindActivity.class);
+                    break;
+            }
+        }
+    };
+
+    private void jumpToActivity(Class<?> activity){
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    protected void initData() {
 
         //获取cpu的使用率和内存使用率
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (progressRun){
-
                     updateCPU();
-
+                    updateMem();
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
+
+
         }).start();
     }
 
-    private void updateCPU(){
-        StringBuilder tv = new StringBuilder();
-        int rate = 0;
-
-        try {
-            String Result;
-            Process p;
-            p = Runtime.getRuntime().exec("top -n 1");
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((Result = br.readLine()) != null) {
-                if (Result.trim().length() < 1) {
-                    continue;
-                } else {
-                    String[] CPUusr = Result.split("%");
-                    tv.append("USER:" + CPUusr[0] + "\n");
-                    String[] CPUusage = CPUusr[0].split("User");
-                    String[] SYSusage = CPUusr[1].split("System");
-                    tv.append("CPU:" + CPUusage[1].trim() + " length:" + CPUusage[1].trim().length() + "\n");
-                    tv.append("SYS:" + SYSusage[1].trim() + " length:" + SYSusage[1].trim().length() + "\n");
-
-                    rate = Integer.parseInt(CPUusage[1].trim()) + Integer.parseInt(SYSusage[1].trim());
-                    break;
-                }
-            }
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    /**
+     * 更新内存使用率
+     */
+    private void updateMem() {
+        int rate = SystemUtils.getMemRate(this);
+        if (rate > 100){
+            rate = 100;
         }
+        if (rate <= 0){
+            rate = 1;
+        }
+        if (mMemProgress != null){
+            mMemProgress.setProgress(rate);
+        }
+    }
 
-        if (cpuProgress != null){
-            cpuProgress.setProgress(rate);
+    /**
+     * 更新CPU使用率
+     */
+    private void updateCPU(){
+        int rate = SystemUtils.getCPURate();
+        if (rate > 100){
+            rate = 100;
+        }
+        if (rate <= 0){
+            rate = 1;
+        }
+        if (mCpuProgress != null){
+            mCpuProgress.setProgress(rate);
         }
     }
 
@@ -140,5 +171,11 @@ public class MainActivity extends BaseActivity {
         dataList.add(new Icon(R.drawable.round_background_green, R.drawable.icon_contact,
                 getString(R.string.func_backup)));
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressRun = false;
     }
 }

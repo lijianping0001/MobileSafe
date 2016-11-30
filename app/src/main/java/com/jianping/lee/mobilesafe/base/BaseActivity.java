@@ -9,10 +9,12 @@ import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.StatusBarUtils;
 
+import butterknife.ButterKnife;
+
 /**
  * Created by Li on 2016/11/27.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class BaseActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         setStatusBar();
+        ButterKnife.inject(this);
     }
 
     private void setStatusBar() {
@@ -38,4 +41,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         ((MyApplication)getApplication()).removeActivity(this);
     }
+
+    protected abstract void initView();
+
+    protected abstract void initData();
 }

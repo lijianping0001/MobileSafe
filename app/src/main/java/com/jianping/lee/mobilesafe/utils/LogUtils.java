@@ -10,8 +10,8 @@ import android.util.Log;
  */
 public class LogUtils {
 
-    public static boolean isDebug = false;
-    private static final String TAG = "onbonbx";
+    public static boolean isDebug = true;
+    private static final String TAG = "mobilesafe";
     private LogUtils(){
 
     }

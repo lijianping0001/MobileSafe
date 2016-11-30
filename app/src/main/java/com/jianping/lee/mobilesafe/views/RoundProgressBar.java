@@ -55,7 +55,7 @@ public class RoundProgressBar extends View {
     /**
      * 当前进度
      */
-    private int progress = 30;
+    private int progress = 5;
 
     public RoundProgressBar(Context context) {
         super(context);
