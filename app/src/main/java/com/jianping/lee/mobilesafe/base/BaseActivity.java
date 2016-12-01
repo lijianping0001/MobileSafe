@@ -1,5 +1,6 @@
 package com.jianping.lee.mobilesafe.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +16,8 @@ import butterknife.ButterKnife;
  * Created by Li on 2016/11/27.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+
+    protected boolean landscape = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!ScreenUtils.isFullScreen(this)){
             StatusBarUtils.setColorNoTranslucent(this, ContextCompat.getColor(this, R.color.toolbar));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        if (landscape){
+            //设置为横屏
+            if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        }else {
+            //设置为竖屏
+            if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+        super.onResume();
     }
 
     @Override

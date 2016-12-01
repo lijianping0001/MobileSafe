@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LostFindActivity"></activity>
+        <activity android:name=".activity.OpenLostFindActivity" />
+        <activity android:name=".activity.SetupPasswordActivity"></activity>
     </application>
 
 </manifest>

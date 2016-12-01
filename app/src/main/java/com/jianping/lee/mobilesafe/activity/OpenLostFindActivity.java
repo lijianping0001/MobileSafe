@@ -1,6 +1,5 @@
 package com.jianping.lee.mobilesafe.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,11 +7,12 @@ import android.widget.TextView;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
+import com.jianping.lee.mobilesafe.utils.SPUtils;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LostFindActivity extends BaseActivity {
+public class OpenLostFindActivity extends BaseActivity {
 
     @InjectView(R.id.tv_title_center)
     TextView mTitle;
@@ -23,7 +23,7 @@ public class LostFindActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lost_find);
+        setContentView(R.layout.activity_open_lost_find);
         initView();
     }
 

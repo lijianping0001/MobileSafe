@@ -1,36 +1,25 @@
 package com.jianping.lee.mobilesafe.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.IconAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.model.Icon;
-import com.jianping.lee.mobilesafe.utils.CommomUtils;
 import com.jianping.lee.mobilesafe.utils.DensityUtils;
-import com.jianping.lee.mobilesafe.utils.LogUtils;
+import com.jianping.lee.mobilesafe.utils.SPUtils;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.SystemUtils;
 import com.jianping.lee.mobilesafe.views.RoundProgressBar;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends BaseActivity {
@@ -79,7 +68,7 @@ public class MainActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position){
                 case 0://手机防盗
-                    jumpToActivity(LostFindActivity.class);
+                    jumpToActivity(SetupPasswordActivity.class);
                     break;
             }
         }

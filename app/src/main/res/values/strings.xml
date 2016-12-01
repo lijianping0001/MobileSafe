@@ -5,6 +5,8 @@
     <string name="cpu">CPU</string>
     <string name="memory">内存</string>
 
+    <string name="puzzle_draw_hint">请绘制解锁图案</string>
+
 
     <string name="func_protection">手机防盗</string>
     <string name="func_speed_up">一键加速</string>

@@ -20,22 +20,7 @@ public class SPUtils {
      * 保存在手机里面的文件名
      */
     public static final String FILE_NAME = "config";
-    /**
-     * 自动更新
-     */
-    public static final String AUTO_UPDATE_APP = "autoUpdateApp";
-    /**
-     * 语言
-     */
-    public static final String LANGUAGE = "language";
-    /**
-     * 上传时间
-     */
-    public static final String UPLOAD_TIME = "cloudUploadTime";
-    /**
-     * 下载时间
-     */
-    public static final String DOWNLOAD_TIME = "cloudDownloadTime";
+
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
      *
