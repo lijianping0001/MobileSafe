@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jianping.lee.mobilesafe">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"
@@ -19,7 +21,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.OpenLostFindActivity" />
-        <activity android:name=".activity.SetupPasswordActivity"></activity>
+        <activity android:name=".activity.SetupPasswordActivity" />
+        <activity android:name=".activity.SetupPhoneNumActivity" />
+        <activity android:name=".activity.LostFindStatusActivity"></activity>
     </application>
 
 </manifest>

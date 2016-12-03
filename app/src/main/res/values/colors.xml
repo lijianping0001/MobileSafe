@@ -12,4 +12,6 @@
     <color name="myYellow">#F5EB31</color>
     <color name="myRed">#E84E40</color>
     <color name="myLightBlue">#29b6f6</color>
+
+    <color name="gray">#bbbbbb</color>
 </resources>

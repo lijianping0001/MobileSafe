@@ -1,7 +1,10 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +42,24 @@ public class OpenLostFindActivity extends BaseActivity {
 
     }
 
+
+    @OnClick(R.id.btn_open_lost)
+    void OnClickOpenFind(View view){
+        //开启手机防盗
+        String phoneNum = (String) SPUtils.get(this, "phoneNum", null);
+        if (TextUtils.isEmpty(phoneNum)){//未设置亲友号码
+            startActivity(new Intent(this, SetupPhoneNumActivity.class));
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_right_out);
+        }else {//已设置
+            startActivity(new Intent(this, LostFindStatusActivity.class));
+            overridePendingTransition(R.anim.push_right_in,
+                    R.anim.push_right_out);
+        }
+    }
+
     @OnClick(R.id.iv_title_back)
-    void OnClickBack(){
+    void OnClickBack(View view){
         finish();
         overridePendingTransition(R.anim.push_right_in,
                 R.anim.push_right_out);

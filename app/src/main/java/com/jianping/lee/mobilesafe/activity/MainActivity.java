@@ -13,6 +13,7 @@ import com.jianping.lee.mobilesafe.adapter.IconAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.model.Icon;
 import com.jianping.lee.mobilesafe.utils.DensityUtils;
+import com.jianping.lee.mobilesafe.utils.IntentUtils;
 import com.jianping.lee.mobilesafe.utils.SPUtils;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.SystemUtils;
@@ -68,17 +69,12 @@ public class MainActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position){
                 case 0://手机防盗
-                    jumpToActivity(SetupPasswordActivity.class);
+                    IntentUtils.startActivityWithAnim(MainActivity.this, SetupPasswordActivity.class,
+                            R.anim.push_left_in, R.anim.push_left_out);
                     break;
             }
         }
     };
-
-    private void jumpToActivity(Class<?> activity){
-        Intent intent = new Intent(this, activity);
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
 
     protected void initData() {
 

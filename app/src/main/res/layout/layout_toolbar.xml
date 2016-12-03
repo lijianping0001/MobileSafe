@@ -11,9 +11,10 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_centerVertical="true"
+        android:src="@drawable/nav_back"
         android:visibility="gone"
         android:background="@drawable/toolbar_item_selector"
-        android:src="@drawable/nav_back"/>
+        />
 
     <TextView
         android:id="@+id/tv_title_left"

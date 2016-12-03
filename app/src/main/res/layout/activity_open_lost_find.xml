@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".activity.OpenLostFindActivity">
 
     <include layout="@layout/layout_toolbar">
 
     </include>
 
-</RelativeLayout>
+    <ImageView
+        android:layout_marginTop="80dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/map_location"/>
+
+    <Button
+        android:id="@+id/btn_open_lost"
+        android:layout_marginTop="100dp"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:text="@string/start_find_lost"
+        android:background="@drawable/round_button"/>
+
+</LinearLayout>

@@ -39,7 +39,7 @@ public class LocusPassWordView extends View{
     //
     private List<Point> sPoints = new ArrayList<Point>();
     private boolean checking = false;
-    private long CLEAR_TIME = 1000;
+    private long CLEAR_TIME = 500;
     private int pwdMaxLen = 9;
     private int pwdMinLen = 4;
     private boolean isTouch = true;
