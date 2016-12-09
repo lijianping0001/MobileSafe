@@ -20,6 +20,22 @@ public class SPUtils {
      * 保存在手机里面的文件名
      */
     public static final String FILE_NAME = "config";
+    /**
+     * 开启防盗
+     */
+    public static final String PROTECTING = "protecting";
+    /**
+     * 手机防盗亲友号码
+     */
+    public static final String PHONE_NUM = "phoneNum";
+    /**
+     * sim卡的串号
+     */
+    public static final String SIM_NUM = "simNum";
+    /**
+     * 防卸载
+     */
+    public static final String UNINTALL = "uninstall";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法

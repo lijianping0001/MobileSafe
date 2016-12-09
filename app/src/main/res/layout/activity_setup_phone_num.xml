@@ -23,6 +23,7 @@
         android:background="@drawable/round_edit_text"
         android:drawableRight="@drawable/icon_contact_num"
         android:paddingRight="5dp"
+        android:maxLength="11"
         android:hint="@string/phone_num"
         android:inputType="phone" />
 

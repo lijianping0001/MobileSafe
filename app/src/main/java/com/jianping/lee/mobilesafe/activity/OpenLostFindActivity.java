@@ -45,18 +45,23 @@ public class OpenLostFindActivity extends BaseActivity {
 
     @OnClick(R.id.btn_open_lost)
     void OnClickOpenFind(View view){
+        SPUtils.put(this, SPUtils.PROTECTING, true);
         //开启手机防盗
-        String phoneNum = (String) SPUtils.get(this, "phoneNum", null);
+        String phoneNum = (String) SPUtils.get(this, SPUtils.PHONE_NUM, "");
         if (TextUtils.isEmpty(phoneNum)){//未设置亲友号码
+            finish();
             startActivity(new Intent(this, SetupPhoneNumActivity.class));
-            overridePendingTransition(R.anim.push_right_in,
-                    R.anim.push_right_out);
+            overridePendingTransition(R.anim.push_left_in,
+                    R.anim.push_left_out);
         }else {//已设置
+            finish();
             startActivity(new Intent(this, LostFindStatusActivity.class));
-            overridePendingTransition(R.anim.push_right_in,
-                    R.anim.push_right_out);
+            overridePendingTransition(R.anim.push_left_in,
+                    R.anim.push_left_out);
         }
     }
+
+
 
     @OnClick(R.id.iv_title_back)
     void OnClickBack(View view){

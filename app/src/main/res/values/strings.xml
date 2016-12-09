@@ -39,4 +39,10 @@
     <!-- 防盗状态 -->
     <string name="open_uninstall">防卸载功能</string>
     <string name="already_setup_password">已设置</string>
+    <string name="phone_num_error">手机号码格式不正确</string>
+    <string name="ensure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="contact">联系人</string>
+    <string name="android_version">Android版本：</string>
+    <string name="phone_name">手机名称：</string>
 </resources>

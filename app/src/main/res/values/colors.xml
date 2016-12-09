@@ -13,5 +13,13 @@
     <color name="myRed">#E84E40</color>
     <color name="myLightBlue">#29b6f6</color>
 
-    <color name="gray">#bbbbbb</color>
+    <color name="grey">#bbbbbb</color>
+    <color name="lightGrey">#eeeeee</color>
+
+    <color name="paramsBlue">#738FFE</color>
+
+    <color name="btnDel">#E84E40</color>
+    <color name="btnOK">#29B6F6</color>
+    <color name="darkGrey">#bb888888</color>
+    <color name="red">#E51C23</color>
 </resources>

@@ -2,13 +2,19 @@ package com.jianping.lee.mobilesafe.base;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.StatusBarUtils;
+import com.jianping.lee.mobilesafe.utils.ToastUtils;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
 
@@ -61,7 +67,36 @@ public abstract class BaseActivity extends AppCompatActivity {
         ((MyApplication)getApplication()).removeActivity(this);
     }
 
+    /**
+     * 打印吐司
+     * @param msg
+     */
+    protected void showToast(String msg){
+        ToastUtils.showToast(this, msg, Gravity.CENTER);
+    }
+
     protected abstract void initView();
 
     protected abstract void initData();
+
+
+    protected void handleMessage(Message msg){
+
+    }
+
+    protected static class MyHandler extends Handler {
+
+        private final WeakReference<BaseActivity> mActivity;
+
+        public MyHandler(BaseActivity activity){
+            mActivity = new WeakReference<BaseActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            BaseActivity activity = mActivity.get();
+            activity.handleMessage(msg);
+        }
+    }
 }

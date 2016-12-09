@@ -34,6 +34,8 @@ public class SetupPasswordActivity extends BaseActivity {
 
     private int count = 0;
 
+    private boolean reSetup = false;
+
     private String mPassword = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,12 @@ public class SetupPasswordActivity extends BaseActivity {
             mSetupPassword = false;
         }else {//已设置密码
             mSetupPassword = true;
+        }
+        //重新设置密码
+        Intent intent = getIntent();
+        reSetup = intent.getBooleanExtra("setup", false);
+        if (reSetup){
+            mSetupPassword = false;
         }
 
         if (passWordView != null){
@@ -110,10 +118,14 @@ public class SetupPasswordActivity extends BaseActivity {
     }
 
     private void goNext(){
-        boolean protecting = (boolean) SPUtils.get(this, "protecting", false);
+        if (reSetup){
+            OnClickBack();
+            return;
+        }
+        boolean protecting = (boolean) SPUtils.get(this, SPUtils.PROTECTING, false);
         if (protecting){
             //开启防盗，是否设置过亲友号码
-            String phoneNum = (String) SPUtils.get(this, "phoneNum", "");
+            String phoneNum = (String) SPUtils.get(this, SPUtils.PHONE_NUM, "");
             if (TextUtils.isEmpty(phoneNum)){
                 //未设置亲友号码
                 jumpToActivity(SetupPhoneNumActivity.class);

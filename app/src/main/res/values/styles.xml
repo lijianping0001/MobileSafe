@@ -26,4 +26,15 @@
 
     </style>
 
+    <style name="addProDialog" parent="android:Theme.Dialog">
+        <item name="android:width">280dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowBackground">@drawable/round_edit_text</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>
