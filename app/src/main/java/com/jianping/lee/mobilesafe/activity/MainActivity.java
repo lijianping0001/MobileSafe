@@ -73,6 +73,11 @@ public class MainActivity extends BaseActivity {
                             R.anim.push_left_in, R.anim.push_left_out);
                     break;
 
+                case 2://软件管理
+                    IntentUtils.startActivityWithAnim(MainActivity.this, AppManagerActivity.class,
+                            R.anim.push_left_in, R.anim.push_left_out);
+                    break;
+
                 case 7://硬件查询
                     IntentUtils.startActivityWithAnim(MainActivity.this, HardwareDetectActivity.class,
                             R.anim.push_left_in, R.anim.push_left_out);

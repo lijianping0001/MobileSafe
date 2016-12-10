@@ -45,4 +45,8 @@
     <string name="contact">联系人</string>
     <string name="android_version">Android版本：</string>
     <string name="phone_name">手机名称：</string>
+    <string name="uninstall">卸载</string>
+    <string name="system_app">系统软件</string>
+    <string name="user_app">个人软件</string>
+    <string name="uninstall_system_hint">系统软件需要有root权限后才可以被卸载</string>
 </resources>

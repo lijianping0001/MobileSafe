@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -35,9 +36,18 @@ public class HardwareAdapter extends RecyclerView.Adapter<HardwareAdapter.ViewHo
     private Context mContext;
 
     private List<Info> infoList;
-
-    private BroadcastReceiver batteryLevelRcvr;
+    /**
+     * 监听电池状态变化广播接收者
+     */
+    private BroadcastReceiver batteryLevelReceiver;
     private IntentFilter batteryLevelFilter;
+
+    /**
+     * 监听网络变化的广播接受者
+     */
+    private BroadcastReceiver networkReceiver;
+    private IntentFilter networkFilter;
+
 
     DecimalFormat df = new DecimalFormat("###.0");
 
@@ -85,13 +95,13 @@ public class HardwareAdapter extends RecyclerView.Adapter<HardwareAdapter.ViewHo
             Info time = new Info("已开机时间", SystemUtils.getSystemRunTime());
             infoList.add(time);
 
-            Info battery = new Info("电池信息", "");
+            Info battery = new Info("电池信息", "100%");
             infoList.add(battery);
 
-            Info batteryTemp = new Info("电池温度", "");
+            Info batteryTemp = new Info("电池温度", "25℃");
             infoList.add(batteryTemp);
 
-            Info batteryVoltage = new Info("电池电压", "");
+            Info batteryVoltage = new Info("电池电压", "4000mV");
             infoList.add(batteryVoltage);
 
             Info networkInfo = new Info("网络信息", "");
@@ -136,13 +146,54 @@ public class HardwareAdapter extends RecyclerView.Adapter<HardwareAdapter.ViewHo
         }
 
         monitorBatteryState();
+        monitorNetworkState();
+    }
+
+    /**
+     * 监听网络变化
+     */
+    private void monitorNetworkState() {
+        networkReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateNetworkState();
+                notifyDataSetChanged();
+                LogUtils.i("receive network changed");
+            }
+        };
+        networkFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        mContext.registerReceiver(networkReceiver, networkFilter);
+    }
+
+    /**
+     * 更新网络类型和IP地址
+     */
+    private void updateNetworkState() {
+        if (infoList != null){
+            if (infoList.size() < 7){
+                return;
+            }
+            Info networkType = infoList.get(6);
+            networkType.value = SystemUtils.getTelcomOperator(mContext);
+            infoList.remove(6);
+            infoList.add(6, networkType);
+
+
+            if (infoList.size() < 8){
+                return;
+            }
+            Info ipAddr = infoList.get(7);
+            ipAddr.value = SystemUtils.getIP(mContext);
+            infoList.remove(7);
+            infoList.add(7, ipAddr);
+        }
     }
 
     /**
      * 监听电池状态
      */
     private void monitorBatteryState() {
-        batteryLevelRcvr = new BroadcastReceiver() {
+        batteryLevelReceiver = new BroadcastReceiver() {
 
             public void onReceive(Context context, Intent intent) {
                 String info;
@@ -197,10 +248,11 @@ public class HardwareAdapter extends RecyclerView.Adapter<HardwareAdapter.ViewHo
 
                 updateBatteryTemp(df.format(temperature * 0.1f) + "℃");
                 updateBatteryVoltage(voltage + "mV");
+                notifyDataSetChanged();
             }
         };
         batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        mContext.registerReceiver(batteryLevelRcvr, batteryLevelFilter);
+        mContext.registerReceiver(batteryLevelReceiver, batteryLevelFilter);
     }
 
     /**
@@ -257,14 +309,17 @@ public class HardwareAdapter extends RecyclerView.Adapter<HardwareAdapter.ViewHo
      */
     public void release(){
         if (mContext != null){
-            if (batteryLevelRcvr != null){
-                mContext.unregisterReceiver(batteryLevelRcvr);
+            if (batteryLevelReceiver != null){
+                mContext.unregisterReceiver(batteryLevelReceiver);
+            }
+            if (networkReceiver != null){
+                mContext.unregisterReceiver(networkReceiver);
             }
         }
         infoList.clear();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    protected static class ViewHolder extends RecyclerView.ViewHolder{
 
         @InjectView(R.id.tv_item_hardware_info)
         TextView info;

@@ -18,6 +18,10 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.regex.Pattern;
 
 /**
@@ -180,13 +184,8 @@ public class SystemUtils {
             return NETWORK_NONE;
         }
         // 判断是不是连接的是不是wifi
-        NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (null != wifiInfo) {
-            NetworkInfo.State state = wifiInfo.getState();
-            if (null != state)
-                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
-                    return NETWORK_WIFI;
-                }
+        if (isWiFiConnected(context)){
+            return NETWORK_WIFI;
         }
 
         String operatorName = getOperatorName(context);
@@ -257,16 +256,36 @@ public class SystemUtils {
      * @return
      */
     public static String getIP(Context context){
-        //获取wifi服务
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        //判断wifi是否开启
-        if (!wifiManager.isWifiEnabled()) {
-            wifiManager.setWifiEnabled(true);
+        if (isWiFiConnected(context)){
+            //获取wifi服务
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            int ipAddress = wifiInfo.getIpAddress();
+            String ip = intToIp(ipAddress);
+            return ip;
+        }else {
+            try
+            {
+                for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();)
+                {
+                    NetworkInterface intf = en.nextElement();
+                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();)
+                    {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        if (!inetAddress.isLoopbackAddress())
+                        {
+                            return inetAddress.getHostAddress().toString();
+                        }
+                    }
+                }
+            }
+            catch (SocketException ex)
+            {
+                ex.printStackTrace();
+            }
+            return null;
         }
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int ipAddress = wifiInfo.getIpAddress();
-        String ip = intToIp(ipAddress);
-        return ip;
     }
 
     private static String intToIp(int i) {
@@ -332,5 +351,25 @@ public class SystemUtils {
             return 0;
         }
 
+    }
+
+    /**
+     * 判断WiFi是否连接
+     * @param context
+     * @return
+     */
+    private static boolean isWiFiConnected(Context context){
+        //获取系统的网络服务
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // 判断是不是连接的是不是wifi
+        NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (null != wifiInfo) {
+            NetworkInfo.State state = wifiInfo.getState();
+            if (null != state)
+                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
+                    return true;
+                }
+        }
+        return false;
     }
 }

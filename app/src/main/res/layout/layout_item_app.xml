@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:id="@+id/rl_item_app"
+    android:layout_height="wrap_content">
+
+    <View
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+    <ImageView
+        android:id="@+id/iv_item_app"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_image"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/tv_item_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_item_app"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="微信"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/tv_item_app_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6.7.1"
+        android:layout_alignLeft="@id/tv_item_app_name"
+        android:layout_below="@id/tv_item_app_name"
+        android:textSize="16sp"
+        android:layout_marginTop="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_item_app_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_item_app_name"
+        android:layout_below="@id/tv_item_app_version"
+        android:textSize="16sp"
+        android:layout_marginTop="2dp"
+        android:text="大小：16M"/>
+
+
+    <Button
+        android:id="@+id/btn_item_app_uninstall"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:text="@string/uninstall"
+        android:textColor="@android:color/white"
+        android:background="@drawable/round_button"/>
+
+
+
+</RelativeLayout>
