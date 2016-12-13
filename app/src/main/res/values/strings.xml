@@ -49,4 +49,16 @@
     <string name="system_app">系统软件</string>
     <string name="user_app">个人软件</string>
     <string name="uninstall_system_hint">系统软件需要有root权限后才可以被卸载</string>
+    <string name="blacknum_mode_phone">电话拦截</string>
+    <string name="blacknum_mode_text">短信拦截</string>
+    <string name="blacknum_mode_all">电话和短信拦截</string>
+    <string name="blacknum">黑名单号码</string>
+    <string name="phone">电话</string>
+    <string name="text">短信</string>
+    <string name="blacknum_empty">黑名单号码不能为空</string>
+    <string name="nothing">这里什么也没有</string>
+    <string name="unlocked">未加锁</string>
+    <string name="locked">已加锁</string>
+    <string name="query">查询</string>
+    <string name="number_empty">号码不能为空</string>
 </resources>

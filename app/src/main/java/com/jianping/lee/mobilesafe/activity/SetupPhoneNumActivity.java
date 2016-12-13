@@ -22,12 +22,6 @@ import butterknife.OnClick;
 
 public class SetupPhoneNumActivity extends BaseActivity {
 
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @InjectView(R.id.cb_setup_phone_backup)
     CheckBox mBackup;
 
@@ -62,12 +56,6 @@ public class SetupPhoneNumActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-    }
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(View view){
-        finish();
-        overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 
     /**

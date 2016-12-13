@@ -4,10 +4,12 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
@@ -17,18 +19,26 @@ import com.jianping.lee.mobilesafe.utils.ToastUtils;
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by Li on 2016/11/27.
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    @InjectView(R.id.tv_title_center)
+    protected TextView mTitle;
+
+    @InjectView(R.id.iv_title_back)
+    protected ImageView mBack;
+
     protected boolean landscape = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MyApplication)getApplication()).addAcitivity(this);
+        ((MyApplication)getApplication()).addActivity(this);
     }
 
     @Override
@@ -66,6 +76,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         ((MyApplication)getApplication()).removeActivity(this);
     }
+
+    /**
+     * 返回按钮
+     * @param view
+     */
+    @OnClick(R.id.iv_title_back)
+    protected void OnClickBack(View view){
+        finish();
+        overridePendingTransition(R.anim.push_right_in,
+                R.anim.push_right_out);
+    }
+
 
     /**
      * 打印吐司

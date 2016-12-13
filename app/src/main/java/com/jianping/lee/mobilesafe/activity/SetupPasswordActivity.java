@@ -18,12 +18,6 @@ import butterknife.OnClick;
 
 public class SetupPasswordActivity extends BaseActivity {
 
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @InjectView(R.id.tv_setup_password_hint)
     TextView mHint;
 
@@ -119,7 +113,7 @@ public class SetupPasswordActivity extends BaseActivity {
 
     private void goNext(){
         if (reSetup){
-            OnClickBack();
+            OnClickBack(null);
             return;
         }
         boolean protecting = (boolean) SPUtils.get(this, SPUtils.PROTECTING, false);
@@ -149,13 +143,5 @@ public class SetupPasswordActivity extends BaseActivity {
     @Override
     protected void initData() {
 
-    }
-
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(){
-        finish();
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_right_out);
     }
 }

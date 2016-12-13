@@ -32,14 +32,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class AppManagerActivity extends BaseActivity {
-
-
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @InjectView(R.id.tl_app_manager)
     TabLayout mTablayout;
 
@@ -147,13 +139,6 @@ public class AppManagerActivity extends BaseActivity {
         }.start();
 
 
-    }
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(View view){
-        finish();
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_right_out);
     }
 
     @Override

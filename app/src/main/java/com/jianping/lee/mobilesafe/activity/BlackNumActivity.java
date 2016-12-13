@@ -5,59 +5,67 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jianping.lee.greendao.BlackNum;
 import com.jianping.lee.mobilesafe.R;
+import com.jianping.lee.mobilesafe.adapter.BlackNumAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
+import com.jianping.lee.mobilesafe.db.MyBlackNumDao;
 import com.jianping.lee.mobilesafe.utils.SPUtils;
+import com.jianping.lee.mobilesafe.views.RecyclerViewDivider;
 
 import butterknife.InjectView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-public class LostFindStatusActivity extends BaseActivity {
-    @InjectView(R.id.switch_lost_find_status)
-    Switch mProtecting;
+public class BlackNumActivity extends BaseActivity {
 
-    @InjectView(R.id.switch_lost_find_uninstall)
-    Switch mUnistall;
+    @InjectView(R.id.rv_black_num)
+    RecyclerView mRecyclerView;
 
-    @InjectView(R.id.tv_lost_find_status_num)
-    TextView mPhoneNum;
+    @InjectView(R.id.iv_title_right)
+    ImageView mAddNum;
+
+    @InjectView(R.id.tv_black_num_empty)
+    TextView emptyLayout;
 
     private EditText mInputNum;
+
+    private String mName;
+
+    private BlackNumAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lost_find_status);
+        setContentView(R.layout.activity_black_num);
         initView();
+        initData();
     }
 
     @Override
     protected void initView() {
-        mTitle.setText(getString(R.string.func_protection));
+        mTitle.setText(getString(R.string.func_defend));
         mBack.setVisibility(View.VISIBLE);
-        mBack.setImageResource(R.drawable.nav_back);
+        mAddNum.setVisibility(View.VISIBLE);
+        mAddNum.setImageResource(R.drawable.nav_add);
 
-        mProtecting.setChecked(true);
-        if ((boolean)SPUtils.get(this, SPUtils.UNINTALL, false)){
-            mUnistall.setChecked(true);
-        }
-        String phoneNum = (String) SPUtils.get(this, SPUtils.PHONE_NUM, "");
-        if (!TextUtils.isEmpty(phoneNum)){
-            mPhoneNum.setText(phoneNum);
-        }
-
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new BlackNumAdapter(this, emptyLayout);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.loadData();
     }
 
     @Override
@@ -65,36 +73,14 @@ public class LostFindStatusActivity extends BaseActivity {
 
     }
 
-    /**
-     * 开启手机防盗状态变化事件
-     * @param buttonView
-     * @param isChecked
-     */
-    @OnCheckedChanged(R.id.switch_lost_find_status)
-    void OnCheckedProtecting(CompoundButton buttonView, boolean isChecked){
-        SPUtils.put(this, SPUtils.PROTECTING, isChecked);
-    }
-
-    /**
-     * 防卸载状态变化事件
-     * @param buttonView
-     * @param isChecked
-     */
-    @OnCheckedChanged(R.id.switch_lost_find_uninstall)
-    void OnCheckedUninstall(CompoundButton buttonView, boolean isChecked){
-        SPUtils.put(this, SPUtils.UNINTALL, isChecked);
-    }
-
-    /**
-     * 修改亲友号码
-     */
-    @OnClick(R.id.rl_lost_find_status_num)
-    void OnClickNum(){
+    @OnClick(R.id.iv_title_right)
+    void onClickAdd(){
+        mName = null;
         final Dialog dialog = new Dialog(this, R.style.addProDialog);
-        dialog.setTitle(R.string.phone_num);
-        final View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_selected_contact, null);
-        mInputNum = (EditText) dialogView.findViewById(R.id.et_selected_contact);
-        mInputNum.setText(mPhoneNum.getText().toString());
+        dialog.setTitle(R.string.blacknum);
+        final View dialogView = LayoutInflater.from(this).inflate(R.layout.layout_add_black_num, null);
+        mInputNum = (EditText) dialogView.findViewById(R.id.et_add_black_num);
+        final RadioGroup radioGroup = (RadioGroup) dialogView.findViewById(R.id.rg_add_black_num);
         mInputNum.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -132,15 +118,46 @@ public class LostFindStatusActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                String newNum = mInputNum.getText().toString().trim();
-                mPhoneNum.setText(newNum);
-                SPUtils.put(LostFindStatusActivity.this, SPUtils.PHONE_NUM, newNum);
+                String phoneNum = mInputNum.getText().toString().trim();
+                if (TextUtils.isEmpty(phoneNum)){
+                    showToast(getString(R.string.blacknum_empty));
+                    return;
+                }
+                int radioBtnId = radioGroup.getCheckedRadioButtonId();
+                int mode = 3;
+                switch (radioBtnId){
+                    case R.id.rb_add_black_num_phone:
+                        mode = 1;
+                        break;
+                    case R.id.rb_add_black_num_text:
+                        mode = 2;
+                        break;
+                    case R.id.rb_add_black_num_all:
+                        mode = 3;
+                        break;
+                }
+                addBlackNum2Db(phoneNum, mode);
             }
         });
         dialog.setContentView(dialogView);
         dialog.show();
     }
 
+    /**
+     * 添加一个黑名单号码
+     * @param phoneNum
+     * @param mode
+     */
+    private void addBlackNum2Db(String phoneNum, int mode) {
+        //添加到数据库
+        BlackNum blackNum = new BlackNum();
+        blackNum.setName(mName);
+        blackNum.setPhone(phoneNum);
+        blackNum.setMode(mode);
+        MyBlackNumDao.getInstance(this).addData(blackNum, 0);
+
+        mAdapter.loadData();
+    }
 
     private void selectContact(){
         //选择联系人,开启一个新的界面,
@@ -153,19 +170,12 @@ public class LostFindStatusActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null){
             String phoneNum = data.getStringExtra("phone").replace("-", "").replace(" ", "").trim();
+            mName = data.getStringExtra("name").trim();
             if (mInputNum != null){
                 mInputNum.setText(phoneNum);
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @OnClick(R.id.rl_lost_find_status_password)
-    void OnClickSetupPuzzle(){
-        Intent intent = new Intent(this, SetupPasswordActivity.class);
-        intent.putExtra("setup",true);
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 }

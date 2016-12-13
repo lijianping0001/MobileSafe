@@ -17,12 +17,6 @@ import butterknife.OnClick;
 
 public class OpenLostFindActivity extends BaseActivity {
 
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,14 +53,5 @@ public class OpenLostFindActivity extends BaseActivity {
             overridePendingTransition(R.anim.push_left_in,
                     R.anim.push_left_out);
         }
-    }
-
-
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(View view){
-        finish();
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_right_out);
     }
 }

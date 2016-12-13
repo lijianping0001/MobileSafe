@@ -30,13 +30,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class SelectedContactActivity extends BaseActivity {
-
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @InjectView(R.id.lv_contact)
     ListView mListView;
 
@@ -96,8 +89,10 @@ public class SelectedContactActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //这里要利用adapter.getItem(position)来获取当前position所对应的对象
                 String phoneNum = ((ContactInfo)mAdapter.getItem(position)).getPhone();
+                String name = ((ContactInfo)mAdapter.getItem(position)).getName();
                 Intent data = new Intent();
                 data.putExtra("phone", phoneNum);
+                data.putExtra("name",name);
                 setResult(0, data);
                 finish();
             }
@@ -140,7 +135,7 @@ public class SelectedContactActivity extends BaseActivity {
 
     /**
      * 为ListView填充数据
-     * @param date
+     * @param data
      * @return
      */
     private List<ContactInfo> fillData(List<ContactInfo> data){
@@ -183,13 +178,5 @@ public class SelectedContactActivity extends BaseActivity {
         // 根据a-z进行排序
         Collections.sort(filterDateList, pinyinComparator);
         mAdapter.updateListView(filterDateList);
-    }
-
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(View view){
-        finish();
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_right_out);
     }
 }

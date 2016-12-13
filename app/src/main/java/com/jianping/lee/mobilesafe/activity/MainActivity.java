@@ -1,8 +1,6 @@
 package com.jianping.lee.mobilesafe.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -14,7 +12,6 @@ import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.model.Icon;
 import com.jianping.lee.mobilesafe.utils.DensityUtils;
 import com.jianping.lee.mobilesafe.utils.IntentUtils;
-import com.jianping.lee.mobilesafe.utils.SPUtils;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.SystemUtils;
 import com.jianping.lee.mobilesafe.views.RoundProgressBar;
@@ -69,22 +66,37 @@ public class MainActivity extends BaseActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position){
                 case 0://手机防盗
-                    IntentUtils.startActivityWithAnim(MainActivity.this, SetupPasswordActivity.class,
-                            R.anim.push_left_in, R.anim.push_left_out);
+                    startNewActivity(SetupPasswordActivity.class);
                     break;
 
                 case 2://软件管理
-                    IntentUtils.startActivityWithAnim(MainActivity.this, AppManagerActivity.class,
-                            R.anim.push_left_in, R.anim.push_left_out);
+                    startNewActivity(AppManagerActivity.class);
+                    break;
+
+                case 3://骚扰拦截
+                    startNewActivity(BlackNumActivity.class);
+                    break;
+
+                case 4://程序锁
+                    startNewActivity(AppLockActivity.class);
                     break;
 
                 case 7://硬件查询
-                    IntentUtils.startActivityWithAnim(MainActivity.this, HardwareDetectActivity.class,
-                            R.anim.push_left_in, R.anim.push_left_out);
+                    startNewActivity(HardwareDetectActivity.class);
                     break;
+
+                case 8://归属地查询
+                    startNewActivity(NumberAddressActivity.class);
             }
         }
     };
+
+    private void startNewActivity(Class<?> cls){
+        IntentUtils.startActivityWithAnim(MainActivity.this, cls,
+                R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+
 
     protected void initData() {
 

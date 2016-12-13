@@ -13,8 +13,8 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name=".base.MyApplication"
@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,11 @@
         <activity android:name=".activity.LostFindStatusActivity" />
         <activity android:name=".activity.SelectedContactActivity" />
         <activity android:name=".activity.HardwareDetectActivity" />
-        <activity android:name=".activity.AppManagerActivity"></activity>
+        <activity android:name=".activity.AppManagerActivity" />
+        <activity android:name=".activity.BlackNumActivity" />
+        <activity android:name=".activity.AppLockActivity" />
+        <activity android:name=".activity.NumberAddressActivity" />
+        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

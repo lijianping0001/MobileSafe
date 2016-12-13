@@ -20,13 +20,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class HardwareDetectActivity extends BaseActivity {
-
-    @InjectView(R.id.tv_title_center)
-    TextView mTitle;
-
-    @InjectView(R.id.iv_title_back)
-    ImageView mBack;
-
     @InjectView(R.id.tv_hardware_detect_type)
     TextView mType;
 
@@ -84,13 +77,6 @@ public class HardwareDetectActivity extends BaseActivity {
         if (mAdapter != null){
             mAdapter.release();
         }
-    }
-
-    @OnClick(R.id.iv_title_back)
-    void OnClickBack(View view){
-        finish();
-        overridePendingTransition(R.anim.push_right_in,
-                R.anim.push_right_out);
     }
 
     @Override
