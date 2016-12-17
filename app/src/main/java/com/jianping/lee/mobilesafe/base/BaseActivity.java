@@ -21,15 +21,16 @@ import java.lang.ref.WeakReference;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 /**
  * Created by Li on 2016/11/27.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-
+    @Optional
     @InjectView(R.id.tv_title_center)
     protected TextView mTitle;
-
+    @Optional
     @InjectView(R.id.iv_title_back)
     protected ImageView mBack;
 
@@ -81,6 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 返回按钮
      * @param view
      */
+    @Optional
     @OnClick(R.id.iv_title_back)
     protected void OnClickBack(View view){
         finish();

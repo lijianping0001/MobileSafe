@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/myGreen"
+    tools:context=".activity.AntiVirusActivity">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:layout_weight="4">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/anti_virus"/>
+
+        <TextView
+            android:id="@+id/tv_anti_virus"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:text="上次扫描：未扫描"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_anti_virus_start"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/lightGrey"
+        android:gravity="center"
+        android:layout_weight="5">
+
+        <Button
+            android:id="@+id/btn_anti_virus_start"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:text="@string/func_virus"
+            android:background="@drawable/round_button_white"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_anti_virus_scan"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="@color/lightGrey"
+        android:gravity="center"
+        android:layout_weight="5">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_anti_virus"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/btn_anti_virus_cancel"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:text="@string/stop"
+            android:background="@drawable/round_button_white"/>
+
+    </LinearLayout>
+
+</LinearLayout>

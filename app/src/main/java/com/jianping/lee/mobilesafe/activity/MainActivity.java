@@ -1,15 +1,28 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.app.ActivityManager;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.text.format.Formatter;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.IconAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
+import com.jianping.lee.mobilesafe.engine.TaskInfoProvider;
 import com.jianping.lee.mobilesafe.model.Icon;
+import com.jianping.lee.mobilesafe.model.ProcessInfo;
 import com.jianping.lee.mobilesafe.utils.DensityUtils;
 import com.jianping.lee.mobilesafe.utils.IntentUtils;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
@@ -17,6 +30,7 @@ import com.jianping.lee.mobilesafe.utils.SystemUtils;
 import com.jianping.lee.mobilesafe.views.RoundProgressBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.InjectView;
 
@@ -35,6 +49,21 @@ public class MainActivity extends BaseActivity {
 
     @InjectView(R.id.iv_title_right)
     ImageView mSetting;
+
+    @InjectView(R.id.iv_main_cloud_up)
+    ImageView mSpeedUp;
+
+    @InjectView(R.id.iv_main_cloud_down)
+    ImageView mSpeedDown;
+
+    @InjectView(R.id.iv_main_rocket)
+    ImageView mRocket;
+
+    @InjectView(R.id.rl_main_clean)
+    RelativeLayout mClean;
+
+    private long mSavedMem = 0;
+    private int mKilledCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +98,10 @@ public class MainActivity extends BaseActivity {
                     startNewActivity(SetupPasswordActivity.class);
                     break;
 
+                case 1://一键清理
+                    cleanProcess();
+                    break;
+
                 case 2://软件管理
                     startNewActivity(AppManagerActivity.class);
                     break;
@@ -79,6 +112,14 @@ public class MainActivity extends BaseActivity {
 
                 case 4://程序锁
                     startNewActivity(AppLockActivity.class);
+                    break;
+
+                case 5://病毒查杀
+                    startNewActivity(AntiVirusActivity.class);
+                    break;
+
+                case 6://清理缓存
+                    startNewActivity(CleanCacheActivity.class);
                     break;
 
                 case 7://硬件查询
@@ -177,6 +218,88 @@ public class MainActivity extends BaseActivity {
                 getString(R.string.func_net_speed)));
         dataList.add(new Icon(R.drawable.round_background_green, R.drawable.icon_contact,
                 getString(R.string.func_backup)));
+
+    }
+
+    /**
+     * 一键加速
+     */
+    private void cleanProcess() {
+        mClean.setVisibility(View.VISIBLE);
+        new Thread(){
+            @Override
+            public void run() {
+                killProcess();
+                SystemClock.sleep(1000);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        startAnimation();
+
+                    }
+                });
+            }
+        }.start();
+
+
+    }
+
+    /**
+     * 火箭动画
+     */
+    private void startAnimation(){
+        AnimationDrawable animationDrawable = (AnimationDrawable) mRocket.getBackground();
+        animationDrawable.start();
+
+        AnimationSet translateAnimation = (AnimationSet) AnimationUtils.loadAnimation(this, R.anim.rocket_fly);
+
+        mRocket.startAnimation(translateAnimation);
+
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+        alphaAnimation.setDuration(1500);
+
+        ScaleAnimation scaleAnimation = new ScaleAnimation(0f, 1f, 0.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1f);
+        scaleAnimation.setDuration(1500);
+
+        mSpeedUp.startAnimation(alphaAnimation);
+        AnimationSet animationSet = new AnimationSet(true);
+        animationSet.addAnimation(alphaAnimation);
+        animationSet.addAnimation(scaleAnimation);
+
+        mSpeedDown.startAnimation(animationSet);
+        animationSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mClean.setVisibility(View.GONE);
+                showToast("清理了" + mKilledCount + "个进程," + "释放了" + Formatter.formatFileSize(MainActivity.this, mSavedMem) + "的内存");
+                mKilledCount = 0;
+                mSavedMem = 0;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    /**
+     * 清理进程
+     */
+    private void killProcess(){
+        List<ProcessInfo> infoList = TaskInfoProvider.getRunningProcess(this);
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+
+        for (ProcessInfo processInfo : infoList){
+            manager.killBackgroundProcesses(processInfo.getPackName());
+            mKilledCount++;
+            mSavedMem += processInfo.getMemSize();
+        }
 
     }
 

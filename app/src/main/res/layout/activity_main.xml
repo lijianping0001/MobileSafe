@@ -1,91 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:progressBar="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activity.MainActivity">
 
-    <include layout="@layout/layout_toolbar"/>
-
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:background="@color/myGreen"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_height="240dp">
+        android:layout_height="match_parent">
+
+        <include layout="@layout/layout_toolbar"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@color/myGreen"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="240dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="40dp"
+                android:gravity="center">
+
+                <com.jianping.lee.mobilesafe.views.RoundProgressBar
+                    android:id="@+id/view_main_cpu"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+
+                    progressBar:roundColor="#88c1c1c1"
+                    progressBar:roundProgressColor="@android:color/white"
+                    progressBar:textSize="40sp"
+                    progressBar:roundWidth="7dp" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:text="@string/cpu"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginLeft="50dp">
+
+                <com.jianping.lee.mobilesafe.views.RoundProgressBar
+                    android:id="@+id/view_main_mem"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+
+                    progressBar:roundColor="#88c1c1c1"
+                    progressBar:roundProgressColor="@android:color/white"
+                    progressBar:textSize="30sp"
+                    progressBar:roundWidth="6dp"/>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:text="@string/memory"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <GridView
+            android:layout_margin="10dp"
+            android:id="@+id/gv_main_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="40dp"
+            android:numColumns="3"
+            android:overScrollMode="never"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="20dp"
+            android:horizontalSpacing="30dp"
             android:gravity="center">
 
-            <com.jianping.lee.mobilesafe.views.RoundProgressBar
-                android:id="@+id/view_main_cpu"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-
-                progressBar:roundColor="#88c1c1c1"
-                progressBar:roundProgressColor="@android:color/white"
-                progressBar:textSize="40sp"
-                progressBar:roundWidth="7dp" />
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:text="@string/cpu"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginLeft="50dp">
-
-            <com.jianping.lee.mobilesafe.views.RoundProgressBar
-                android:id="@+id/view_main_mem"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-
-                progressBar:roundColor="#88c1c1c1"
-                progressBar:roundProgressColor="@android:color/white"
-                progressBar:textSize="30sp"
-                progressBar:roundWidth="6dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:text="@string/memory"/>
-
-        </LinearLayout>
+        </GridView>
 
     </LinearLayout>
 
-    <GridView
-        android:layout_margin="10dp"
-        android:id="@+id/gv_main_content"
+
+    <RelativeLayout
+        android:id="@+id/rl_main_clean"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="3"
-        android:overScrollMode="never"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="20dp"
-        android:horizontalSpacing="30dp"
-        android:gravity="center">
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
 
-    </GridView>
+        <ImageView
+            android:id="@+id/iv_main_cloud_up"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/desktop_smoke_m"/>
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/iv_main_cloud_down"
+            android:visibility="invisible"
+            android:layout_above="@id/iv_main_cloud_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/desktop_smoke_t"/>
+
+        <ImageView
+            android:id="@+id/iv_main_rocket"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rockets_bg"
+            android:layout_width="104dp"
+            android:layout_height="190dp"/>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

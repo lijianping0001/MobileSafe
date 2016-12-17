@@ -18,8 +18,10 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         copyDB("address.db");
+        copyDB("antivirus.db");
 
         IntentUtils.startActivityForDelay(this, MainActivity.class, 2000);
+        finish();
         overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 

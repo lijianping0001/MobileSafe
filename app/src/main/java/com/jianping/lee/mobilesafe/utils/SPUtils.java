@@ -36,6 +36,10 @@ public class SPUtils {
      * 防卸载
      */
     public static final String UNINTALL = "uninstall";
+    /**
+     * 扫描病毒时间
+     */
+    public static final String SCAN_VIRUS_TIME = "scanVirusTime";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法

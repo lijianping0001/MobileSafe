@@ -61,4 +61,15 @@
     <string name="locked">已加锁</string>
     <string name="query">查询</string>
     <string name="number_empty">号码不能为空</string>
+    <string name="stop">停止</string>
+    <string name="last_scan">上次扫描：</string>
+    <string name="never_scanned">未扫描</string>
+    <string name="scanning">正在扫描：</string>
+    <string name="scan_result">扫描结果：</string>
+    <string name="safe">安全</string>
+    <string name="completed">完成</string>
+    <string name="restart_scan">重新扫描</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
