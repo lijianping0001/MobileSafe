@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jianping.lee.mobilesafe.activity.AppSettingActivity">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_app_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn_app_setting_logout"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:text="退出登录"
+        android:background="@drawable/round_button_red"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

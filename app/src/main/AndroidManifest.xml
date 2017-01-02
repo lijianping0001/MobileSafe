@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jianping.lee.mobilesafe">
 
+    <!-- android:sharedUserId="android.uid.system" -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,6 +19,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.DELETE_CACHE_FILES" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".base.MyApplication"
@@ -47,7 +50,13 @@
         <activity android:name=".activity.NumberAddressActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.AntiVirusActivity" />
-        <activity android:name=".activity.CleanCacheActivity"></activity>
+        <activity android:name=".activity.CleanCacheActivity" />
+        <activity android:name=".activity.ScanCodeActivity" />
+        <activity android:name=".activity.ScanResultActivity" />
+        <activity android:name=".activity.BackUpActivity" />
+        <activity android:name=".activity.AppMoreActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.AppSettingActivity"></activity>
     </application>
 
 </manifest>

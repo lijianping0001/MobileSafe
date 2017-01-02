@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.jianping.lee.mobilesafe.activity.ScanResultActivity">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/icon_safe"
+        android:layout_height="240dp" />
+
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/myRed"
+        android:textSize="16sp"
+        android:text="二维码扫描结果:"/>
+
+    <TextView
+        android:id="@+id/tv_scan_result_content"
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:background="@color/myOrange"
+        tools:text="测试下"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_scan_result"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:textColor="@android:color/white"
+            android:text="安全访问"
+            android:background="@drawable/round_button"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

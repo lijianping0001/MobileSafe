@@ -13,23 +13,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.AppAdapter;
-import com.jianping.lee.mobilesafe.adapter.AppViewPagerAdapter;
+import com.jianping.lee.mobilesafe.adapter.ViewPagerAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.engine.AppInfoProvider;
 import com.jianping.lee.mobilesafe.model.AppInfo;
-import com.jianping.lee.mobilesafe.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class AppManagerActivity extends BaseActivity {
     @InjectView(R.id.tl_app_manager)
@@ -95,7 +91,7 @@ public class AppManagerActivity extends BaseActivity {
         mTablayout.addTab(mTablayout.newTab().setText(mTitleList.get(0)));
         mTablayout.addTab(mTablayout.newTab().setText(mTitleList.get(1)));
 
-        AppViewPagerAdapter adapter = new AppViewPagerAdapter(mTitleList, mViewList);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(mTitleList, mViewList);
         mViewPager.setAdapter(adapter);
         mTablayout.setupWithViewPager(mViewPager);
 

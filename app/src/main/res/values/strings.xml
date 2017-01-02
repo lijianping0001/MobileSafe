@@ -69,7 +69,6 @@
     <string name="safe">安全</string>
     <string name="completed">完成</string>
     <string name="restart_scan">重新扫描</string>
+    <string name="cache_detail">查看详情</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

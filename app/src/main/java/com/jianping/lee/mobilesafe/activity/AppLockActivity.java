@@ -1,10 +1,8 @@
 package com.jianping.lee.mobilesafe.activity;
 
-import android.content.BroadcastReceiver;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,9 +14,8 @@ import android.widget.LinearLayout;
 
 import com.jianping.lee.greendao.LockedApp;
 import com.jianping.lee.mobilesafe.R;
-import com.jianping.lee.mobilesafe.adapter.AppAdapter;
 import com.jianping.lee.mobilesafe.adapter.AppLockAdapter;
-import com.jianping.lee.mobilesafe.adapter.AppViewPagerAdapter;
+import com.jianping.lee.mobilesafe.adapter.ViewPagerAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.db.MyLockAppDao;
 import com.jianping.lee.mobilesafe.engine.AppInfoProvider;
@@ -93,7 +90,7 @@ public class AppLockActivity extends BaseActivity {
         mTablayout.addTab(mTablayout.newTab().setText(mTitleList.get(0)));
         mTablayout.addTab(mTablayout.newTab().setText(mTitleList.get(1)));
 
-        AppViewPagerAdapter adapter = new AppViewPagerAdapter(mTitleList, mViewList);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(mTitleList, mViewList);
         mViewPager.setAdapter(adapter);
         mTablayout.setupWithViewPager(mViewPager);
     }

@@ -6,6 +6,7 @@
 
     <color name="toolbar">#11BF4B</color>
     <color name="myGreen">#11BF4B</color>
+    <color name="darkGreen">#22ff66</color>
     <color name="myOrange">#FFA726</color>
     <color name="myPurple">#AB47BC</color>
     <color name="myBlue">#738FFE</color>
@@ -22,4 +23,6 @@
     <color name="btnOK">#29B6F6</color>
     <color name="darkGrey">#bb888888</color>
     <color name="red">#E51C23</color>
+    <color name="maskColor">#33FFFFFF</color>
+
 </resources>

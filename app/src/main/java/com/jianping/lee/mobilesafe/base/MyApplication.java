@@ -10,6 +10,8 @@ import com.jianping.lee.mobilesafe.db.BaseDao;
 
 import java.util.ArrayList;
 
+import cn.bmob.v3.Bmob;
+
 /**
  * Created by Li on 2016/11/27.
  */
@@ -17,12 +19,20 @@ public class MyApplication extends Application {
 
     private ArrayList<Activity> activityList = new ArrayList<>();
 
+    public static String BMOB_APP_ID = "a38816603444895eb5ec33d75f480b0f";
+
     private static DaoMaster daoMaster;
     private static DaoSession daoSession;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        initBmobConfig();
+    }
+
+    private void initBmobConfig() {
+        Bmob.initialize(this, BMOB_APP_ID);
     }
 
     /**

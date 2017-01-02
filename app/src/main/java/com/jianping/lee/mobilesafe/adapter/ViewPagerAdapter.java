@@ -9,13 +9,13 @@ import java.util.List;
 /**
  * Created by Li on 2016/12/10.
  */
-public class AppViewPagerAdapter extends PagerAdapter {
+public class ViewPagerAdapter extends PagerAdapter {
 
     private List<String> titleList;
 
     private List<View> viewList;
 
-    public AppViewPagerAdapter(List<String> titleList, List<View> viewList){
+    public ViewPagerAdapter(List<String> titleList, List<View> viewList){
         this.titleList = titleList;
         this.viewList = viewList;
     }

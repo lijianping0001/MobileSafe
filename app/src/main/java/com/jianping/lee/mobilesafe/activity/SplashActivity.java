@@ -1,5 +1,6 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -20,9 +21,22 @@ public class SplashActivity extends AppCompatActivity {
         copyDB("address.db");
         copyDB("antivirus.db");
 
-        IntentUtils.startActivityForDelay(this, MainActivity.class, 2000);
-        finish();
-        overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SystemClock.sleep(2000);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        IntentUtils.startActivityWithAnim(SplashActivity.this,
+                                MainActivity.class,
+                                R.anim.push_left_in, R.anim.push_left_out);
+                        finish();
+                    }
+                });
+            }
+        }).start();
+
     }
 
     // 拷贝资产目录下的数据库到Android系统目录

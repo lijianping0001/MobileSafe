@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -84,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @Optional
     @OnClick(R.id.iv_title_back)
-    protected void OnClickBack(View view){
+    protected void OnClickBack(@Nullable View view){
         finish();
         overridePendingTransition(R.anim.push_right_in,
                 R.anim.push_right_out);

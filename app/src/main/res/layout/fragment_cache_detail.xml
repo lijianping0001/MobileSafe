@@ -1,13 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.jianping.lee.mobilesafe.fragment.CacheDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ExpandableListView
+        android:id="@+id/elv_cache_detail_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:divider="@color/grey"
+        android:dividerHeight="1dp"
+        android:childDivider="@color/grey">
 
-</FrameLayout>
+    </ExpandableListView>
+
+
+</LinearLayout>

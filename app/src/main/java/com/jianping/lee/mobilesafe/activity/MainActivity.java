@@ -1,7 +1,6 @@
 package com.jianping.lee.mobilesafe.activity;
 
 import android.app.ActivityManager;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
 
     protected void initView() {
         mSetting.setVisibility(View.VISIBLE);
-        mSetting.setImageResource(R.drawable.icon_app);
+        mSetting.setImageResource(R.drawable.icon_item);
         //动态计算GridView的宽度，适配不同的屏幕
         int screenWidth = ScreenUtils.getScreenWidth(this);
         int iconWidth = (screenWidth - DensityUtils.dp2px(this, 120)) / 3;
@@ -128,6 +128,15 @@ public class MainActivity extends BaseActivity {
 
                 case 8://归属地查询
                     startNewActivity(NumberAddressActivity.class);
+                    break;
+
+                case 9://条码
+                    startNewActivity(ScanCodeActivity.class);
+                    break;
+
+                case 11://安全备份
+                    startNewActivity(BackUpActivity.class);
+                    break;
             }
         }
     };
@@ -137,7 +146,10 @@ public class MainActivity extends BaseActivity {
                 R.anim.push_left_in, R.anim.push_left_out);
     }
 
-
+    @OnClick(R.id.iv_title_right)
+    void onClick(){
+        startNewActivity(AppMoreActivity.class);
+    }
 
     protected void initData() {
 
@@ -198,7 +210,7 @@ public class MainActivity extends BaseActivity {
                 getString(R.string.func_protection)));
         dataList.add(new Icon(R.drawable.round_background_orange, R.drawable.icon_speed,
                 getString(R.string.func_speed_up)));
-        dataList.add(new Icon(R.drawable.round_background_purple, R.drawable.icon_app,
+        dataList.add(new Icon(R.drawable.round_background_purple, R.drawable.icon_appllication,
                 getString(R.string.func_app_manager)));
         dataList.add(new Icon(R.drawable.round_background_blue, R.drawable.icon_defend,
                 getString(R.string.func_defend)));
