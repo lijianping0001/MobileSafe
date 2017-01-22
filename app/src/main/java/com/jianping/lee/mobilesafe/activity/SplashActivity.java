@@ -5,13 +5,21 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jianping.lee.mobilesafe.R;
+import com.jianping.lee.mobilesafe.base.MyApplication;
+import com.jianping.lee.mobilesafe.db.MyLockAppDao;
 import com.jianping.lee.mobilesafe.utils.CommonUtils;
 import com.jianping.lee.mobilesafe.utils.IntentUtils;
+import com.jianping.lee.mobilesafe.utils.LogUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,16 +34,26 @@ import cn.bmob.v3.listener.BmobUpdateListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
 import cn.bmob.v3.update.UpdateResponse;
 import cn.bmob.v3.update.UpdateStatus;
+import cn.domob.android.ads.RTSplashAd;
+import cn.domob.android.ads.RTSplashAdListener;
+import cn.domob.android.ads.SplashAd;
+import cn.domob.android.ads.SplashAdListener;
 
 public class SplashActivity extends AppCompatActivity {
-
-    private MyHandler handler;
 
     @InjectView(R.id.iv_splash_icon)
     ImageView icon;
 
     @InjectView(R.id.tv_splash_name)
     TextView name;
+
+    @InjectView(R.id.ll_splash_ad)
+    RelativeLayout llAd;
+
+    SplashAd splashAd;
+    RTSplashAd rtSplashAd;
+    //	 缓存开屏广告:true   实时开屏广告:false
+    private boolean isSplash = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +68,100 @@ public class SplashActivity extends AppCompatActivity {
         icon.setImageResource(R.mipmap.ic_launcher);
         name.setText("安全卫士\n" + CommonUtils.getAppVersionName(this));
 
-        handler = new MyHandler(this);
 
         copyDB("address.db");
         copyDB("antivirus.db");
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SystemClock.sleep(2000);
-                checkAppUpdate();
-            }
-        }).start();
+        SystemClock.sleep(500);
 
+        showSplashAd();
+
+    }
+
+    /**
+     * 展示开屏广告
+     */
+    private void showSplashAd() {
+        /**
+         *
+         * DomobSplashMode.DomobSplashModeFullScreen 请求开屏广告的尺寸为全屏
+         * DomobSplashMode.DomobSplashModeSmallEmbed 请求开屏广告的尺寸不是全屏，根据设备分辨率计算出合适的小屏尺寸
+         * DomobSplashMode.DomobSplashModeBigEmbed 请求开屏广告的尺寸不是全屏，更具设备分辨率计算出合适的相对SmallMode的尺寸
+         *
+         */
+        if (isSplash) {
+//			 缓存开屏广告
+            splashAd = new SplashAd(this, MyApplication.DOMOB_PUBLISH_ID, MyApplication.SPLASH_PPID,
+                    SplashAd.SplashMode.SplashModeBigEmbed);
+//		    setSplashTopMargin is available when you choose non-full-screen splash mode.
+//			splashAd.setSplashTopMargin(200);
+            splashAd.setSplashAdListener(new SplashAdListener() {
+                @Override
+                public void onSplashPresent() {
+                    LogUtils.i("DomobSDKDemo", "onSplashStart");
+                }
+
+                @Override
+                public void onSplashDismiss() {
+                    LogUtils.i("DomobSDKDemo", "onSplashClosed");
+//					 开屏回调被关闭时，立即进行界面跳转，从开屏界面到主界面。
+                    jumpMainActivity();
+//					如果应用没有单独的闪屏Activity，需要调用closeSplash方法去关闭开屏广告
+//					splashAd.closeSplash();
+                }
+
+                @Override
+                public void onSplashLoadFailed() {
+                    LogUtils.i("DomobSDKDemo", "onSplashLoadFailed");
+                }
+            });
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (splashAd.isSplashAdReady()) {
+                        splashAd.splash(SplashActivity.this, llAd);
+                    } else {
+                        Toast.makeText(SplashActivity.this, "Splash ad is NOT ready.", Toast.LENGTH_SHORT).show();
+                        jumpMainActivity();
+                    }
+                }
+            }, 1);
+        } else {
+//			 实时开屏广告
+            rtSplashAd = new RTSplashAd(this, MyApplication.DOMOB_PUBLISH_ID, MyApplication.SPLASH_PPID,
+                    SplashAd.SplashMode.SplashModeFullScreen);
+//		    setRTSplashTopMargin is available when you choose non-full-screen splash mode.
+//			rtSplashAd.setRTSplashTopMargin(200);
+            rtSplashAd.setRTSplashAdListener(new RTSplashAdListener() {
+                @Override
+                public void onRTSplashDismiss() {
+                    LogUtils.i("DomobSDKDemo", "onRTSplashClosed");
+//					 开屏回调被关闭时，立即进行界面跳转，从开屏界面到主界面。
+                    jumpMainActivity();
+//					如果应用没有单独的闪屏Activity，需要调用closeRTSplash方法去关闭开屏广告
+//					rtSplashAd.closeRTSplash();
+                }
+
+                @Override
+                public void onRTSplashLoadFailed() {
+                    Log.i("DomobSDKDemo", "onRTSplashLoadFailed");
+                }
+
+                @Override
+                public void onRTSplashPresent() {
+                    Log.i("DomobSDKDemo", "onRTSplashStart");
+                }
+
+            });
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    rtSplashAd.splash(SplashActivity.this, llAd);
+                }
+            }, 1);
+        }
     }
 
     private void jumpMainActivity(){
@@ -98,61 +197,12 @@ public class SplashActivity extends AppCompatActivity {
         }.start();
     }
 
-
-    private void checkAppUpdate(){
-        //允许在非wifi环境下检测应用更新
-        BmobUpdateAgent.setUpdateOnlyWifi(false);
-        //自动更新的逻辑，设置监听
-        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
-            @Override
-            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
-                BmobException exception = updateResponse.getException();
-                if (exception != null) {
-                    handler.sendEmptyMessage(0);
-                }
-            }
-        });
-        //设置对话框的点击事件
-        BmobUpdateAgent.setDialogListener(new BmobDialogButtonListener() {
-            @Override
-            public void onClick(int i) {
-                switch (i) {
-                    case UpdateStatus.Update://立即更新
-                        handler.sendEmptyMessage(0);
-                        break;
-                    case UpdateStatus.NotNow://以后再说
-                        handler.sendEmptyMessage(0);
-                        break;
-                    case UpdateStatus.Close://关闭,强制更新才会出现
-                        handler.sendEmptyMessage(0);
-                        break;
-                    case UpdateStatus.IGNORED://忽略此版本
-                        handler.sendEmptyMessage(0);
-                        break;
-                }
-            }
-        });
-        BmobUpdateAgent.update(SplashActivity.this);
-    }
-
-
-    private static class MyHandler extends Handler {
-
-        private final WeakReference<SplashActivity> mActivity;
-
-        public MyHandler(SplashActivity activity){
-            mActivity = new WeakReference<SplashActivity>(activity);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		 Back key disabled
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
         }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            SplashActivity activity = mActivity.get();
-            activity.handleMessage(msg);
-        }
-    }
-
-    private void handleMessage(Message msg){
-        jumpMainActivity();
+        return super.onKeyDown(keyCode, event);
     }
 }

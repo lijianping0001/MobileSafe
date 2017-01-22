@@ -113,6 +113,11 @@
             </intent-filter>
         </receiver>
 
+
+        <!-- 多盟广告-->
+        <activity android:name="cn.domob.android.ads.DmActivity"
+            android:theme="@android:style/Theme.Translucent"/>
+
     </application>
 
 </manifest>

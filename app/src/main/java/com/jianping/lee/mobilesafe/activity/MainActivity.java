@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.format.Formatter;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -33,6 +34,12 @@ import java.util.List;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.BmobDialogButtonListener;
+import cn.bmob.v3.listener.BmobUpdateListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
+import cn.bmob.v3.update.UpdateResponse;
+import cn.bmob.v3.update.UpdateStatus;
 
 public class MainActivity extends BaseActivity {
 
@@ -64,6 +71,7 @@ public class MainActivity extends BaseActivity {
 
     private long mSavedMem = 0;
     private int mKilledCount = 0;
+    private long mExitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initView();
         initData();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                checkAppUpdate();
+            }
+        }).start();
     }
 
 
@@ -88,6 +103,43 @@ public class MainActivity extends BaseActivity {
         mGridView.setAdapter(adapter);
         mGridView.setOnItemClickListener(clickListener);
 
+    }
+
+
+    private void checkAppUpdate(){
+        //允许在非wifi环境下检测应用更新
+        BmobUpdateAgent.setUpdateOnlyWifi(false);
+        //自动更新的逻辑，设置监听
+        BmobUpdateAgent.setUpdateListener(new BmobUpdateListener() {
+            @Override
+            public void onUpdateReturned(int i, UpdateResponse updateResponse) {
+//                BmobException exception = updateResponse.getException();
+//                if (exception != null) {
+//                    handler.sendEmptyMessage(0);
+//                }
+            }
+        });
+        //设置对话框的点击事件
+        BmobUpdateAgent.setDialogListener(new BmobDialogButtonListener() {
+            @Override
+            public void onClick(int i) {
+//                switch (i) {
+//                    case UpdateStatus.Update://立即更新
+//                        handler.sendEmptyMessage(0);
+//                        break;
+//                    case UpdateStatus.NotNow://以后再说
+//                        handler.sendEmptyMessage(0);
+//                        break;
+//                    case UpdateStatus.Close://关闭,强制更新才会出现
+//                        handler.sendEmptyMessage(0);
+//                        break;
+//                    case UpdateStatus.IGNORED://忽略此版本
+//                        handler.sendEmptyMessage(0);
+//                        break;
+//                }
+            }
+        });
+        BmobUpdateAgent.update(this);
     }
 
     private AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
@@ -242,6 +294,7 @@ public class MainActivity extends BaseActivity {
      */
     private void cleanProcess() {
         mClean.setVisibility(View.VISIBLE);
+        mGridView.setEnabled(false);
         new Thread(){
             @Override
             public void run() {
@@ -292,6 +345,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mClean.setVisibility(View.GONE);
+                mGridView.setEnabled(true);
                 showToast("清理了" + mKilledCount + "个进程," + "释放了" + Formatter.formatFileSize(MainActivity.this, mSavedMem) + "的内存");
                 mKilledCount = 0;
                 mSavedMem = 0;
@@ -323,5 +377,25 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         progressRun = false;
+    }
+
+    /**
+     * 点击两次返回退出程序
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if ((System.currentTimeMillis() - mExitTime) > 2000){
+                showToast("再按一次退出程序");
+                mExitTime = System.currentTimeMillis();
+            }else {
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

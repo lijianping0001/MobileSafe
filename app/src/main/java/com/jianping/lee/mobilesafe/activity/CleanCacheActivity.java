@@ -289,6 +289,9 @@ public class CleanCacheActivity extends BaseActivity {
                 LogUtils.i("file path===" + apkPath);
                 PackageManager pm = this.getPackageManager();
                 PackageInfo packageInfo = pm.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES);
+                if (packageInfo == null){
+                    return;
+                }
                 ApplicationInfo appInfo = packageInfo.applicationInfo;
 
                 cacheInfo.setPackName(apkPath);

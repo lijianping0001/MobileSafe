@@ -14,6 +14,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobConfig;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
 /**
@@ -26,6 +27,10 @@ public class MyApplication extends Application {
     public static String BMOB_APP_ID = "a38816603444895eb5ec33d75f480b0f";
 
     public static String UMENG_APP_ID = "58764940310c9315d90002f1";
+
+    public static String DOMOB_PUBLISH_ID = "56OJ35XIuNySTGKuV7";
+
+    public static String SPLASH_PPID = "16TLQlfoApaacNUU9WNAa7Ez";
 
     private static DaoMaster daoMaster;
     private static DaoSession daoSession;
@@ -64,7 +69,19 @@ public class MyApplication extends Application {
     }
 
     private void initBmobConfig() {
-        Bmob.initialize(this, BMOB_APP_ID);
+//        Bmob.initialize(this, BMOB_APP_ID);
+
+        BmobConfig config =new BmobConfig.Builder(this)
+        //设置appkey
+        .setApplicationId(BMOB_APP_ID)
+        //请求超时时间（单位为秒）：默认15s
+        .setConnectTimeout(5)
+        //文件分片上传时每片的大小（单位字节），默认512*1024
+        .setUploadBlockSize(1024*1024)
+        //文件的过期时间(单位为秒)：默认1800s
+        .setFileExpiration(2500)
+        .build();
+        Bmob.initialize(config);
 
         //自动更新初始化
 //        BmobUpdateAgent.initAppVersion();
