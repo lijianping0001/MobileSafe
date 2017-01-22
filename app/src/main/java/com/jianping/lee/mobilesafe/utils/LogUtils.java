@@ -2,6 +2,8 @@ package com.jianping.lee.mobilesafe.utils;
 
 import android.util.Log;
 
+import com.jianping.lee.mobilesafe.base.MyApplication;
+
 /**
  * @fileName: LogUtils
  * @Author: Li Jianping
@@ -10,7 +12,7 @@ import android.util.Log;
  */
 public class LogUtils {
 
-    public static boolean isDebug = true;
+    public static boolean isDebug = MyApplication.DEBUG;
     private static final String TAG = "mobilesafe";
     private LogUtils(){
 

@@ -1,7 +1,8 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.app.Dialog;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,11 +14,20 @@ import android.widget.TextView;
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.ViewPagerAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
+import com.jianping.lee.mobilesafe.model.MyUser;
+import com.jianping.lee.mobilesafe.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class LoginActivity extends BaseActivity {
 
@@ -39,6 +49,8 @@ public class LoginActivity extends BaseActivity {
     EditText loginPassword;
 
     EditText findEmail;
+
+    private Dialog mDialog;
 
     private View findView, registerView, loginView;
 
@@ -81,6 +93,32 @@ public class LoginActivity extends BaseActivity {
                 return true;
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case FIND_PASSWORD://
+                        mTitle.setText("找回密码");
+                        break;
+                    case LOGIN:
+                        mTitle.setText("登录");
+                        break;
+                    case REGISTER:
+                        mTitle.setText("注册");
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         initFindPassword();
         initRegister();
@@ -113,6 +151,13 @@ public class LoginActivity extends BaseActivity {
         tvFind.setOnClickListener(loginClickListener);
     }
 
+    @OnClick(R.id.iv_title_back)
+    void onClickBack(){
+        finish();
+        overridePendingTransition(0,
+                R.anim.push_top_out);
+    }
+
     /**
      * 登录界面的点击事件
      */
@@ -121,17 +166,57 @@ public class LoginActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.tv_login_register:
-                    mViewPager.setCurrentItem(2);
+                    mViewPager.setCurrentItem(REGISTER);
                     break;
                 case R.id.btn_login_button:
-//                    loginCommit();
+                    loginCommit();
                     break;
                 case R.id.tv_login_find:
-                    mViewPager.setCurrentItem(0);
+                    mViewPager.setCurrentItem(FIND_PASSWORD);
                     break;
             }
         }
     };
+
+    /**
+     * 登录提交
+     */
+    private void loginCommit() {
+        final String emailStr = loginEmail.getText().toString().trim();
+        final String pwdStr = loginPassword.getText().toString().trim();
+
+        //检测格式是否正确
+        if (!checkEmail(emailStr)){
+            showToast("邮箱格式不正确");
+            return;
+        }
+        //密码不能为空
+        if (pwdStr.length() == 0){
+            showToast("密码不能为空");
+            return;
+        }
+
+        mDialog = CommonUtils.createLoadingDialog(this, "登录");
+        mDialog.show();
+        MyUser user = new MyUser();
+        user.setUsername(emailStr);
+        user.setPassword(pwdStr);
+        user.login(new SaveListener<MyUser>() {
+            @Override
+            public void done(MyUser myUser, BmobException e) {
+                if (e == null) {
+                    showToast(R.drawable.item_checked, "登录成功");
+                    onClickBack();
+                } else if (e.getErrorCode() == 101) {
+                    showToast("用户名或密码错误");
+                } else {
+                    showToast("当前网络不给力，请稍后再试");
+                }
+                mDialog.dismiss();
+            }
+        });
+
+    }
 
 
     /**
@@ -142,14 +227,65 @@ public class LoginActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.tv_register_account:
-                    mViewPager.setCurrentItem(1);
+                    mViewPager.setCurrentItem(LOGIN);
                     break;
                 case R.id.btn_register_sign:
-//                    registerCommit();
+                    registerCommit();
                     break;
             }
         }
     };
+
+    /**
+     * 注册提交
+     */
+    private void registerCommit() {
+        final String emailStr = registerEmail.getText().toString().trim();
+        final String pwdStr = registerPassword.getText().toString().trim();
+        String pwdRepeatStr = registerRepeat.getText().toString().trim();
+
+
+        //检测格式是否正确
+        if (!checkEmail(emailStr)){
+            showToast("邮箱格式不正确");
+            return;
+        }
+        //密码不能为空
+        if (pwdStr.length() == 0){
+            showToast("密码不能为空");
+            return;
+        }
+
+        if (!pwdStr.equals(pwdRepeatStr)){
+            showToast("两次输入密码不一致");
+            return;
+        }
+
+        mDialog = CommonUtils.createLoadingDialog(this, "注册");
+        mDialog.show();
+
+        MyUser user = new MyUser();
+        user.setUsername(emailStr);
+        user.setPassword(pwdStr);
+        user.setEmail(emailStr);
+        addSubscription(user.signUp(new SaveListener<MyUser>() {
+            @Override
+            public void done(MyUser myUser, BmobException e) {
+                Message msg = new Message();
+                if (e == null) {
+                    showToast(R.drawable.item_checked, "注册成功");
+                } else {
+                    //202用户已存在
+                    if (e.getErrorCode() == 202) {
+                        showToast("用户名已存在");
+                    } else {
+                        showToast("当前网络不给力，请稍后再试");
+                    }
+                }
+                mDialog.dismiss();
+            }
+        }));
+    }
 
     private void initFindPassword() {
         findEmail = (EditText) findView.findViewById(R.id.et_find_password_email);
@@ -168,16 +304,57 @@ public class LoginActivity extends BaseActivity {
                     mViewPager.setCurrentItem(LOGIN);
                     break;
                 case R.id.btn_find_password_reset:
-//                    commitResetPwd();
+                    commitResetPwd();
                     break;
             }
         }
     };
 
+    /**
+     * 重置密码提交
+     */
+    private void commitResetPwd() {
+        final String emailStr = findEmail.getText().toString().trim();
+        if (!checkEmail(emailStr)){
+            showToast("邮箱格式不正确");
+            return;
+        }
 
+        mDialog = CommonUtils.createLoadingDialog(this, "重置密码");
+        mDialog.show();
+        addSubscription(BmobUser.resetPasswordByEmail(emailStr, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    showToast(R.drawable.item_checked,"重置密码成功");
+                    mViewPager.setCurrentItem(LOGIN);
+                } else {
+                    //205 用户不存在
+                    if (e.getErrorCode() == 205) {
+                        showToast("用户名不存在");
+                    } else {
+                        showToast("当前网络不给力，请稍后再试");
+                    }
+                }
+                mDialog.dismiss();
+            }
+        }));
+
+    }
 
     @Override
     protected void initData() {
 
+    }
+
+    /**
+     * 检查email格式是否正确
+     * @param email
+     * @return
+     */
+    private boolean checkEmail(String email){
+        Pattern pattern = Pattern.compile("[\\w\\.\\-]+@([\\w\\-]+\\.)+[\\w\\-]+",Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

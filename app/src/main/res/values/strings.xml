@@ -71,4 +71,6 @@
     <string name="restart_scan">重新扫描</string>
     <string name="cache_detail">查看详情</string>
 
+    <string name="sample_device_admin_desc">手机卫士高级功能设置</string>
+
 </resources>

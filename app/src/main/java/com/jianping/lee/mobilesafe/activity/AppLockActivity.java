@@ -1,6 +1,10 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.app.usage.UsageStatsManager;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -20,6 +24,7 @@ import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.db.MyLockAppDao;
 import com.jianping.lee.mobilesafe.engine.AppInfoProvider;
 import com.jianping.lee.mobilesafe.model.AppInfo;
+import com.jianping.lee.mobilesafe.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +142,29 @@ public class AppLockActivity extends BaseActivity {
         lockedList.setAdapter(lockedAdapter);
 
         mLoading.setVisibility(View.GONE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+            if (!hasEnabled()){
+                Intent intent = new Intent( Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                startActivity(intent);
+            }
+        }
+    }
+
+    //判断调用该设备中“有权查看使用权限的应用”这个选项的APP有没有打开
+    private boolean hasEnabled() {
+        long ts = System.currentTimeMillis();
+        UsageStatsManager usageStatsManager = (UsageStatsManager)
+                getApplicationContext() .getSystemService("usagestats");
+        List queryUsageStats = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            queryUsageStats = usageStatsManager.queryUsageStats(
+                    UsageStatsManager.INTERVAL_BEST, 0, ts);
+        }
+        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     private AppLockAdapter.LockListener listener = new AppLockAdapter.LockListener() {

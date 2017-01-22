@@ -35,7 +35,8 @@
         android:text="@string/add_phone_num_hint"/>
 
     <LinearLayout
-        android:layout_margin="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -84,6 +85,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/find_cmd_lock"/>
+
+
+    <Button
+        android:id="@+id/btn_setup_phone_active"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="点击激活超级管理员，激活后可以远程锁屏，清除数据" />
 
     <Button
         android:layout_marginTop="50dp"

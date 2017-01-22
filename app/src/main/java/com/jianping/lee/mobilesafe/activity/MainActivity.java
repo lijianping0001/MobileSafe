@@ -134,6 +134,10 @@ public class MainActivity extends BaseActivity {
                     startNewActivity(ScanCodeActivity.class);
                     break;
 
+                case 10://测速
+                    startNewActivity(TestSpeedActivity.class);
+                    break;
+
                 case 11://安全备份
                     startNewActivity(BackUpActivity.class);
                     break;

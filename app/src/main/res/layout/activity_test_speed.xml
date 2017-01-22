@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/myGreen"
+    tools:context="com.jianping.lee.mobilesafe.activity.TestSpeedActivity">
+
+    <include layout="@layout/layout_toolbar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="最高速度"/>
+
+            <TextView
+                android:id="@+id/tv_test_speed_max"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="4.7M/s"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="最低速度"/>
+
+            <TextView
+                android:id="@+id/tv_test_speed_min"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="4.7M/s"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"/>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="平均速度"/>
+
+            <TextView
+                android:id="@+id/tv_test_speed_average"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:text="4.7M/s"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_test_speed_network"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            tools:text="WiFi"/>
+
+        <ImageView
+            android:id="@+id/iv_test_speed_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/image_speed_bg"/>
+
+        <ImageView
+            android:id="@+id/iv_text_speed_center"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginBottom="12dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@id/iv_test_speed_bg"
+            android:src="@drawable/image_speed_center"/>
+
+        <ImageView
+            android:id="@+id/iv_test_speed_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/iv_text_speed_center"
+            android:layout_alignBottom="@id/iv_text_speed_center"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="13dp"
+            android:src="@drawable/image_speed_point"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_test_speed_start"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:textSize="16sp"
+        android:background="@drawable/round_button_white"
+        android:text="开始测速"/>
+
+
+
+</LinearLayout>

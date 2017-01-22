@@ -40,6 +40,14 @@ public class SPUtils {
      * 扫描病毒时间
      */
     public static final String SCAN_VIRUS_TIME = "scanVirusTime";
+    /**
+     * 是否开启黑名单拦截
+     */
+    public static final String BLACK_NUM_INTERCEPT = "blackNumIntercept";
+    /**
+     * 开启显示电话号码归属地
+     */
+    public static final String SHOW_NUM_LOCATION = "showNumLocation";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法

@@ -22,7 +22,7 @@ import com.jianping.lee.mobilesafe.adapter.VirusAdapter;
 import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.db.AntivirusDao;
 import com.jianping.lee.mobilesafe.model.AppInfo;
-import com.jianping.lee.mobilesafe.utils.CommomUtils;
+import com.jianping.lee.mobilesafe.utils.CommonUtils;
 import com.jianping.lee.mobilesafe.utils.LogUtils;
 import com.jianping.lee.mobilesafe.utils.SPUtils;
 
@@ -186,7 +186,7 @@ public class AntiVirusActivity extends BaseActivity {
                         PackageManager.GET_SIGNATURES);
                 for (PackageInfo packageInfo : packageInfos){
                     String apkPath = packageInfo.applicationInfo.sourceDir;
-                    String md5Result = CommomUtils.getMd5ByFilePath(apkPath);
+                    String md5Result = CommonUtils.getMd5ByFilePath(apkPath);
                     final String info = AntivirusDao.isVirus(md5Result);
                     final String appName = packageInfo.applicationInfo.loadLabel(manager).toString();
                     Drawable icon = packageInfo.applicationInfo.loadIcon(manager);

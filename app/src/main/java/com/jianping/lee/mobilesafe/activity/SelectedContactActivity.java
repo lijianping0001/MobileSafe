@@ -7,10 +7,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.adapter.SortAdapter;
@@ -18,7 +16,7 @@ import com.jianping.lee.mobilesafe.base.BaseActivity;
 import com.jianping.lee.mobilesafe.model.CharacterParser;
 import com.jianping.lee.mobilesafe.model.PinyinComparator;
 import com.jianping.lee.mobilesafe.model.ContactInfo;
-import com.jianping.lee.mobilesafe.utils.CommomUtils;
+import com.jianping.lee.mobilesafe.utils.CommonUtils;
 import com.jianping.lee.mobilesafe.views.sortListView.ClearEditText;
 import com.jianping.lee.mobilesafe.views.sortListView.SideBar;
 
@@ -27,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class SelectedContactActivity extends BaseActivity {
     @InjectView(R.id.lv_contact)
@@ -98,7 +95,7 @@ public class SelectedContactActivity extends BaseActivity {
             }
         });
 
-        List<ContactInfo> sourceData = CommomUtils.getContactInfos(this);
+        List<ContactInfo> sourceData = CommonUtils.getContactInfos(this);
         SourceDateList = fillData(sourceData);
 
         // 根据a-z进行排序源数据

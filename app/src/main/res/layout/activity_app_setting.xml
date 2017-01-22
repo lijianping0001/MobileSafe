@@ -17,6 +17,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <Button
+        android:visibility="invisible"
         android:layout_gravity="center_horizontal"
         android:id="@+id/btn_app_setting_logout"
         android:layout_marginTop="20dp"

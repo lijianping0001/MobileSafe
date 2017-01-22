@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:hint="邮箱"
+                android:hint="密码"
                 android:inputType="textPassword" />
         </LinearLayout>
 

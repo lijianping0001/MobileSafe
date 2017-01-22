@@ -1,17 +1,22 @@
 package com.jianping.lee.mobilesafe.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jianping.lee.mobilesafe.R;
+import com.jianping.lee.mobilesafe.service.BlackInterceptService;
+import com.jianping.lee.mobilesafe.utils.SPUtils;
+import com.jianping.lee.mobilesafe.utils.ServiceStautsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +51,7 @@ public class AppSettingAdapter extends RecyclerView.Adapter<AppSettingAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Info info = mDataList.get(position);
 
         holder.icon.setImageResource(info.icon);
@@ -63,6 +68,26 @@ public class AppSettingAdapter extends RecyclerView.Adapter<AppSettingAdapter.Vi
         }else {
             holder.mSwitch.setVisibility(View.GONE);
         }
+
+        holder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switch (position){
+                    case 1://黑名单拦截
+                        SPUtils.put(mContext, SPUtils.BLACK_NUM_INTERCEPT, isChecked);
+                        Intent intent = new Intent(mContext, BlackInterceptService.class);
+                        if (isChecked){
+                            mContext.startService(intent);
+                        }else {
+                            mContext.stopService(intent);
+                        }
+                        break;
+                    case 2://号码归属地
+                        SPUtils.put(mContext, SPUtils.SHOW_NUM_LOCATION, isChecked);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -78,12 +103,13 @@ public class AppSettingAdapter extends RecyclerView.Adapter<AppSettingAdapter.Vi
 
         Info blackNum = new Info(R.drawable.icon_setting_user, "黑名单拦截");
         blackNum.showSwitch = true;
-        blackNum.checked = true;
+//        blackNum.checked = (boolean) SPUtils.get(mContext, SPUtils.BLACK_NUM_INTERCEPT, true);
+        blackNum.checked = ServiceStautsUtils.isServiceRunning(mContext, "com.jianping.lee.mobilesafe.service.BlackInterceptService");
         mDataList.add(blackNum);
 
         Info location = new Info(R.drawable.icon_setting_location, "显示电话号码归属地");
         location.showSwitch = true;
-        location.checked = true;
+        location.checked = (boolean) SPUtils.get(mContext, SPUtils.SHOW_NUM_LOCATION, true);
         mDataList.add(location);
 
         Info about = new Info(R.drawable.icon_setting_about, "关于");

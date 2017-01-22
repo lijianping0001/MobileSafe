@@ -33,12 +33,12 @@
     <EditText
         android:id="@+id/et_number_address"
         android:layout_width="220dp"
+        android:padding="5dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:textSize="18sp"
         android:inputType="phone"
-        android:hint="输入/粘贴号码"
-        android:background="@drawable/round_edit_text"/>
+        android:background="@drawable/round_edit_text"
+        android:hint="输入/粘贴号码"/>
 
     <Button
         android:id="@+id/btn_number_address"

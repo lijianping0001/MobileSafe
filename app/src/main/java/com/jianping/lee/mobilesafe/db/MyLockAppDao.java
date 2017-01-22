@@ -1,6 +1,7 @@
 package com.jianping.lee.mobilesafe.db;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.jianping.lee.greendao.LockedApp;
 import com.jianping.lee.greendao.LockedAppDao;
@@ -17,11 +18,17 @@ public class MyLockAppDao extends BaseDao {
 
     private static LockedAppDao mLockedAppDao;
 
+    private Context mContext;
+
+    private MyLockAppDao(Context context){
+        this.mContext = context;
+    }
+
     public static MyLockAppDao getInstance(Context context){
         if (instance == null){
             synchronized (MyLockAppDao.class){
                 if (instance == null){
-                    instance = new MyLockAppDao();
+                    instance = new MyLockAppDao(context);
                 }
             }
 
@@ -46,6 +53,12 @@ public class MyLockAppDao extends BaseDao {
         if (model instanceof LockedApp){
             mLockedAppDao.insert((LockedApp)model);
         }
+        notifyDataChanged();
+    }
+
+    private void notifyDataChanged() {
+        Uri uri = Uri.parse("content://com.jianping.lee.mobilesafe.applock");
+        mContext.getContentResolver().notifyChange(uri, null);
     }
 
     public boolean find(String packageName){
@@ -62,6 +75,7 @@ public class MyLockAppDao extends BaseDao {
         if (findApp != null){
             mLockedAppDao.delete(findApp);
         }
+        notifyDataChanged();
 
     }
 

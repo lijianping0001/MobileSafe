@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.jianping.lee.mobilesafe.model.Point;
-import com.jianping.lee.mobilesafe.utils.CommomUtils;
+import com.jianping.lee.mobilesafe.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,14 +131,14 @@ public class LocusPassWordView extends View{
     }
 
     private void drawLine(Point start, Point end, Canvas canvas, Paint paint) {
-        double d = CommomUtils.distance(start.x, start.y, end.x, end.y);
+        double d = CommonUtils.distance(start.x, start.y, end.x, end.y);
         float rx = (float) ((end.x-start.x) * dotRadius / 4 / d);
         float ry = (float) ((end.y-start.y) * dotRadius / 4 / d);
         canvas.drawLine(start.x+rx, start.y+ry, end.x-rx, end.y-ry, paint);
     }
 
     private void drawArrow(Canvas canvas, Paint paint, Point start, Point end, float arrowHeight, int angle) {
-        double d = CommomUtils.distance(start.x, start.y, end.x, end.y);
+        double d = CommonUtils.distance(start.x, start.y, end.x, end.y);
         float sin_B = (float) ((end.x - start.x) / d);
         float cos_B = (float) ((end.y - start.y) / d);
         float tan_A = (float) Math.tan(Math.toRadians(angle));
@@ -248,7 +248,7 @@ public class LocusPassWordView extends View{
         for (int i = 0; i < mPoints.length; i++) {
             for (int j = 0; j < mPoints[i].length; j++) {
                 Point p = mPoints[i][j];
-                if (CommomUtils.checkInRound(p.x, p.y, dotRadius, (int) x, (int) y)) {
+                if (CommonUtils.checkInRound(p.x, p.y, dotRadius, (int) x, (int) y)) {
                     return p;
                 }
             }

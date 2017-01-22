@@ -16,6 +16,7 @@ import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.utils.ScreenUtils;
 import com.jianping.lee.mobilesafe.utils.StatusBarUtils;
 import com.jianping.lee.mobilesafe.utils.ToastUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.ref.WeakReference;
 
@@ -23,6 +24,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.Optional;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Li on 2016/11/27.
@@ -37,6 +40,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected boolean landscape = false;
 
+    private CompositeSubscription mCompositeSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +53,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
         setStatusBar();
         ButterKnife.inject(this);
+    }
+
+    /**
+     * 解决Subscription内存泄露问题
+     * @param s
+     */
+    protected void addSubscription(Subscription s) {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+        this.mCompositeSubscription.add(s);
     }
 
     private void setStatusBar() {
@@ -71,11 +87,21 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
         super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (this.mCompositeSubscription != null) {
+            this.mCompositeSubscription.unsubscribe();
+        }
         ((MyApplication)getApplication()).removeActivity(this);
     }
 
@@ -98,6 +124,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void showToast(String msg){
         ToastUtils.showToast(this, msg, Gravity.CENTER);
+    }
+
+    protected void showToast(int resId,String msg){
+        ToastUtils.showToast(this, resId, msg);
     }
 
     protected abstract void initView();

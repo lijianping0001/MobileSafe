@@ -59,7 +59,7 @@ public class SystemUtils {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="com.onbonbx.yqled.activities.FeedbackActivity">
+
+    <include layout="@layout/layout_toolbar">
+
+    </include>
+
+
+    <EditText
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:maxLength="200"
+        android:id="@+id/et_feedback_content"
+        android:background="@android:color/white"
+        android:gravity="start"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:hint="请输入您的意见反馈（200字以内"/>
+
+
+    <EditText
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/et_feedback_tel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:padding="5dp"
+        android:hint="请输入邮箱或电话，以便我们联系您"
+        android:inputType="phone"
+        android:background="@android:color/white"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/btn_feedback_commit"
+        android:layout_marginTop="50dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/btn_ok_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="提交"/>
+
+
+</LinearLayout>
