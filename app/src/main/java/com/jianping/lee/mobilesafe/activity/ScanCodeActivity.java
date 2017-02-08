@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -182,7 +183,9 @@ public class ScanCodeActivity extends BaseActivity implements QRCodeView.Delegat
                     if (string != null){
                         jump2Result(string);
                     }else {
+                        Looper.prepare();
                         showToast("未发现二维码");
+                        Looper.loop();
                     }
                 }
             }).start();

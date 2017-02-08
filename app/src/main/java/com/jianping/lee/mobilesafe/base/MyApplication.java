@@ -11,6 +11,8 @@ import com.jianping.lee.mobilesafe.engine.CrashHandler;
 import com.jianping.lee.mobilesafe.utils.CommonUtils;
 import com.umeng.analytics.MobclickAgent;
 
+import net.youmi.android.AdManager;
+
 import java.util.ArrayList;
 
 import cn.bmob.v3.Bmob;
@@ -28,9 +30,9 @@ public class MyApplication extends Application {
 
     public static String UMENG_APP_ID = "58764940310c9315d90002f1";
 
-    public static String DOMOB_PUBLISH_ID = "56OJ35XIuNySTGKuV7";
+    public static String YOUMI_APP_ID = "066e34d4e400074b";
 
-    public static String SPLASH_PPID = "16TLQlfoApaacNUU9WNAa7Ez";
+    public static String YOUMI_KEY = "bb138c0ca3d921d1";
 
     private static DaoMaster daoMaster;
     private static DaoSession daoSession;
@@ -52,6 +54,8 @@ public class MyApplication extends Application {
 
         initUMengConfig();
 
+        initYoumiConfig();
+
         CommonUtils.startBlackNumService(context);
 
         CommonUtils.startAppLockService(context);
@@ -60,6 +64,13 @@ public class MyApplication extends Application {
             CrashHandler handler = CrashHandler.getInstance();
             handler.init(this);
         }
+    }
+
+    /**
+     * 初始化优米广告
+     */
+    private void initYoumiConfig() {
+        AdManager.getInstance(this).init(YOUMI_APP_ID, YOUMI_KEY, false, false);
     }
 
     private void initUMengConfig() {

@@ -1,5 +1,7 @@
 package com.jianping.lee.mobilesafe.activity;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -17,9 +19,15 @@ import android.widget.Toast;
 import com.jianping.lee.mobilesafe.R;
 import com.jianping.lee.mobilesafe.base.MyApplication;
 import com.jianping.lee.mobilesafe.db.MyLockAppDao;
+import com.jianping.lee.mobilesafe.engine.PermissionHelper;
 import com.jianping.lee.mobilesafe.utils.CommonUtils;
 import com.jianping.lee.mobilesafe.utils.IntentUtils;
 import com.jianping.lee.mobilesafe.utils.LogUtils;
+
+import net.youmi.android.normal.common.ErrorCode;
+import net.youmi.android.normal.spot.SplashViewSettings;
+import net.youmi.android.normal.spot.SpotListener;
+import net.youmi.android.normal.spot.SpotManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,16 +36,6 @@ import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.BmobDialogButtonListener;
-import cn.bmob.v3.listener.BmobUpdateListener;
-import cn.bmob.v3.update.BmobUpdateAgent;
-import cn.bmob.v3.update.UpdateResponse;
-import cn.bmob.v3.update.UpdateStatus;
-import cn.domob.android.ads.RTSplashAd;
-import cn.domob.android.ads.RTSplashAdListener;
-import cn.domob.android.ads.SplashAd;
-import cn.domob.android.ads.SplashAdListener;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -48,12 +46,10 @@ public class SplashActivity extends AppCompatActivity {
     TextView name;
 
     @InjectView(R.id.ll_splash_ad)
-    RelativeLayout llAd;
+    LinearLayout llAd;
 
-    SplashAd splashAd;
-    RTSplashAd rtSplashAd;
-    //	 缓存开屏广告:true   实时开屏广告:false
-    private boolean isSplash = false;
+    private PermissionHelper mPermissionHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,94 +70,106 @@ public class SplashActivity extends AppCompatActivity {
 
         SystemClock.sleep(500);
 
-        showSplashAd();
+        requestPermission();
+    }
 
+    private void requestPermission() {
+        // 当系统为6.0以上时，需要申请权限
+        mPermissionHelper = new PermissionHelper(this);
+        mPermissionHelper.setOnApplyPermissionListener(new PermissionHelper.OnApplyPermissionListener() {
+            @Override
+            public void onAfterApplyAllPermission() {
+                LogUtils.i("All of requested permissions has been granted, so run app logic.");
+                setupSplashAd();
+            }
+        });
+        if (Build.VERSION.SDK_INT < 23) {
+            // 如果系统版本低于23，直接跑应用的逻辑
+            LogUtils.i("The api level of system is lower than 23, so run app logic directly.");
+            setupSplashAd();
+        } else {
+            // 如果权限全部申请了，那就直接跑应用逻辑
+            if (mPermissionHelper.isAllRequestedPermissionGranted()) {
+                LogUtils.i( "All of requested permissions has been granted, so run app logic directly.");
+                setupSplashAd();
+            } else {
+                // 如果还有权限为申请，而且系统版本大于23，执行申请权限逻辑
+                LogUtils.i("Some of requested permissions hasn't been granted, so apply permissions first.");
+                mPermissionHelper.applyPermissions();
+            }
+        }
     }
 
     /**
-     * 展示开屏广告
+     * 设置开屏广告
      */
-    private void showSplashAd() {
-        /**
-         *
-         * DomobSplashMode.DomobSplashModeFullScreen 请求开屏广告的尺寸为全屏
-         * DomobSplashMode.DomobSplashModeSmallEmbed 请求开屏广告的尺寸不是全屏，根据设备分辨率计算出合适的小屏尺寸
-         * DomobSplashMode.DomobSplashModeBigEmbed 请求开屏广告的尺寸不是全屏，更具设备分辨率计算出合适的相对SmallMode的尺寸
-         *
-         */
-        if (isSplash) {
-//			 缓存开屏广告
-            splashAd = new SplashAd(this, MyApplication.DOMOB_PUBLISH_ID, MyApplication.SPLASH_PPID,
-                    SplashAd.SplashMode.SplashModeBigEmbed);
-//		    setSplashTopMargin is available when you choose non-full-screen splash mode.
-//			splashAd.setSplashTopMargin(200);
-            splashAd.setSplashAdListener(new SplashAdListener() {
-                @Override
-                public void onSplashPresent() {
-                    LogUtils.i("DomobSDKDemo", "onSplashStart");
-                }
+    private void setupSplashAd() {
+        // 对开屏进行设置
+        SplashViewSettings splashViewSettings = new SplashViewSettings();
+        //		// 设置是否展示失败自动跳转，默认自动跳转
+        //		splashViewSettings.setAutoJumpToTargetWhenShowFailed(false);
+        // 设置跳转的窗口类
+        splashViewSettings.setTargetClass(MainActivity.class);
+        // 设置开屏的容器
+        splashViewSettings.setSplashViewContainer(llAd);
 
-                @Override
-                public void onSplashDismiss() {
-                    LogUtils.i("DomobSDKDemo", "onSplashClosed");
-//					 开屏回调被关闭时，立即进行界面跳转，从开屏界面到主界面。
-                    jumpMainActivity();
-//					如果应用没有单独的闪屏Activity，需要调用closeSplash方法去关闭开屏广告
-//					splashAd.closeSplash();
-                }
+        // 展示开屏广告
+        SpotManager.getInstance(this)
+                .showSplash(this, splashViewSettings, new SpotListener() {
 
-                @Override
-                public void onSplashLoadFailed() {
-                    LogUtils.i("DomobSDKDemo", "onSplashLoadFailed");
-                }
-            });
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (splashAd.isSplashAdReady()) {
-                        splashAd.splash(SplashActivity.this, llAd);
-                    } else {
-                        Toast.makeText(SplashActivity.this, "Splash ad is NOT ready.", Toast.LENGTH_SHORT).show();
-                        jumpMainActivity();
+                    @Override
+                    public void onShowSuccess() {
+                        LogUtils.i("开屏展示成功");
                     }
-                }
-            }, 1);
-        } else {
-//			 实时开屏广告
-            rtSplashAd = new RTSplashAd(this, MyApplication.DOMOB_PUBLISH_ID, MyApplication.SPLASH_PPID,
-                    SplashAd.SplashMode.SplashModeFullScreen);
-//		    setRTSplashTopMargin is available when you choose non-full-screen splash mode.
-//			rtSplashAd.setRTSplashTopMargin(200);
-            rtSplashAd.setRTSplashAdListener(new RTSplashAdListener() {
-                @Override
-                public void onRTSplashDismiss() {
-                    LogUtils.i("DomobSDKDemo", "onRTSplashClosed");
-//					 开屏回调被关闭时，立即进行界面跳转，从开屏界面到主界面。
-                    jumpMainActivity();
-//					如果应用没有单独的闪屏Activity，需要调用closeRTSplash方法去关闭开屏广告
-//					rtSplashAd.closeRTSplash();
-                }
 
-                @Override
-                public void onRTSplashLoadFailed() {
-                    Log.i("DomobSDKDemo", "onRTSplashLoadFailed");
-                }
+                    @Override
+                    public void onShowFailed(int errorCode) {
+                        LogUtils.i("开屏展示失败");
+                        switch (errorCode) {
+                            case ErrorCode.NON_NETWORK:
+                                LogUtils.i("网络异常");
+                                break;
+                            case ErrorCode.NON_AD:
+                                LogUtils.i("暂无开屏广告");
+                                break;
+                            case ErrorCode.RESOURCE_NOT_READY:
+                                LogUtils.i("开屏资源还没准备好");
+                                break;
+                            case ErrorCode.SHOW_INTERVAL_LIMITED:
+                                LogUtils.i("开屏展示间隔限制");
+                                break;
+                            case ErrorCode.WIDGET_NOT_IN_VISIBILITY_STATE:
+                                LogUtils.i("开屏控件处在不可见状态");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
 
-                @Override
-                public void onRTSplashPresent() {
-                    Log.i("DomobSDKDemo", "onRTSplashStart");
-                }
+                    @Override
+                    public void onSpotClosed() {
+                        LogUtils.i("开屏被关闭");
+                    }
 
-            });
+                    @Override
+                    public void onSpotClicked(boolean isWebPage) {
+                        LogUtils.i("开屏被点击");
+                        LogUtils.i("是否是网页广告？%s", isWebPage ? "是" : "不是");
+                    }
+                });
+    }
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    rtSplashAd.splash(SplashActivity.this, llAd);
-                }
-            }, 1);
-        }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mPermissionHelper.onActivityResult(requestCode, resultCode, data);
     }
 
     private void jumpMainActivity(){
@@ -204,5 +212,12 @@ public class SplashActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 开屏展示界面的 onDestroy() 回调方法中调用
+        SpotManager.getInstance(this).onDestroy();
     }
 }
